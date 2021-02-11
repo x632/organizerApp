@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "118866114906",
+    "project_id": "theorganizerapp",
+    "storage_bucket": "theorganizerapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:118866114906:android:b6a84772a39427b4675b63",
+        "android_client_info": {
+          "package_name": "com.poema.theorganizerapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "118866114906-f6mtemvj6u62pgjc1729nm99aho0uluf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.poema.theorganizerapp",
+            "certificate_hash": "50ae0733f734c2ea5dff3397f2d8145591304916"
+          }
+        },
+        {
+          "client_id": "118866114906-k55i922vr2r5k707i6iisufveqf6e0j0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvnSwQhOLvE8oI5gms9nFY7lZ3DcEt62E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "118866114906-k55i922vr2r5k707i6iisufveqf6e0j0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
