@@ -6,5 +6,6 @@ class Video(
     val imageUrl:String = "",
     val searchTerm1:String = "",
     val searchTerm2:String = "",
-    val docId: String =""
+    val docId: String ="",
+    val groupTitle : String = ""
 )

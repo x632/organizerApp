@@ -11,18 +11,20 @@ import com.poema.theorganizerapp.dataClasses.Video
 import com.poema.theorganizerapp.adapters.VideoAdapter
 import com.poema.theorganizerapp.dataClasses.EntireCategory
 import com.poema.theorganizerapp.dataClasses.VideosGlobal
+import com.poema.theorganizerapp.dataClasses.VideosGlobal.videosGlobal
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_view.*
-import java.util.ArrayList
+import java.lang.reflect.Array.get
+import java.util.*
 
 class MainView : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     lateinit var db: FirebaseFirestore
     private lateinit var videoAdapter: VideoAdapter
-    private lateinit var videos: MutableList<Video>
+    private var videos = mutableListOf<Video>()
     private var uid: String = ""
-    private lateinit var allGroups: MutableList<EntireCategory>
+    private var allGroups = mutableListOf<EntireCategory>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,8 +37,8 @@ class MainView : AppCompatActivity() {
             uid = auth.currentUser!!.uid
         }
 
-        videos = mutableListOf()
-        allGroups = ArrayList()
+
+
         getVideos()
 
         addVideoBtn.setOnClickListener(){
@@ -50,6 +52,7 @@ class MainView : AppCompatActivity() {
     }
 
     private fun getVideos() {
+
         db.collection("users").document(uid).collection("videos")
             .get()
             .addOnSuccessListener { documents ->
@@ -58,8 +61,36 @@ class MainView : AppCompatActivity() {
                     videos.add(temp)
                     VideosGlobal.videosGlobal.add(temp)
                 }
-                allGroups.add(EntireCategory("Group1", videos))
-                initRecyclerView(allGroups)
+                // val immutableVideos = Collections.unmodifiableList(videos)
+                val existingTitles = mutableListOf<String>()
+
+                //sortera vilka grupptitlar som finns
+                for (i in 0 until videos.size) {
+                    for (j in 0 until videos.size) {
+                        if (existingTitles.contains(videos[j].groupTitle)) {//do nothing
+                        }else{
+                            if (videos[i].groupTitle == videos[j].groupTitle){
+                                existingTitles.add(videos[j].groupTitle)
+                            }
+                        }
+                    }
+                   println("Detta är de existerande titlarna: ${existingTitles}")
+
+                }
+                //sortera in videos beroende på grupptitel
+                var vids2 = mutableListOf<Video>()
+                for (i in 0 until existingTitles.size) {
+                    for (j in 0 until videos.size) {
+                        if (videos[j].groupTitle == existingTitles[i]) {
+                            vids2.add(videos[j])
+                        }
+                    }
+
+                    allGroups.add(EntireCategory(existingTitles[i], vids2))
+                    vids2 = mutableListOf()
+                }
+
+                initRecyclerView()
                 videoAdapter.notifyDataSetChanged()
             }
             .addOnFailureListener { exception ->
@@ -67,7 +98,8 @@ class MainView : AppCompatActivity() {
             }
     }
 
-    private fun initRecyclerView(allGroups:MutableList<EntireCategory>){
+
+    private fun initRecyclerView(){
         main_recycler.apply{
             layoutManager = LinearLayoutManager(this@MainView)
             videoAdapter = VideoAdapter(this@MainView,allGroups)
