@@ -7,14 +7,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.poema.theorganizerapp.R
-import com.poema.theorganizerapp.dataClasses.Video
+import com.poema.theorganizerapp.models.Video
 import com.poema.theorganizerapp.adapters.VideoAdapter
-import com.poema.theorganizerapp.dataClasses.EntireCategory
-import com.poema.theorganizerapp.dataClasses.VideosGlobal
-import com.poema.theorganizerapp.dataClasses.VideosGlobal.videosGlobal
+import com.poema.theorganizerapp.models.EntireCategory
+import com.poema.theorganizerapp.models.VideosGlobal.videosGlobal
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_view.*
-import java.lang.reflect.Array.get
 import java.util.*
 
 class MainView : AppCompatActivity() {
@@ -59,7 +57,7 @@ class MainView : AppCompatActivity() {
                 for (document in documents) {
                     val temp = document!!.toObject(Video::class.java)
                     videos.add(temp)
-                    VideosGlobal.videosGlobal.add(temp)
+                    videosGlobal.add(temp)
                 }
                 // val immutableVideos = Collections.unmodifiableList(videos)
                 val existingTitles = mutableListOf<String>()

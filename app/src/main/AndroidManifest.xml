@@ -12,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".activities.IndividualVideo"></activity>
+        <activity android:name=".activities.ShowVideo"></activity>
         <activity android:name=".activities.MainView" />
         <activity android:name=".activities.MainActivity" />
         <activity android:name=".activities.AddVideoProps" />

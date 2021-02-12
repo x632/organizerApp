@@ -1,15 +1,20 @@
 package com.poema.theorganizerapp.adapters
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.poema.theorganizerapp.R
-import com.poema.theorganizerapp.dataClasses.Video
+import com.poema.theorganizerapp.activities.AddVideoProps
+import com.poema.theorganizerapp.activities.ShowVideo
+import com.poema.theorganizerapp.models.Video
 
 class CategoryItemAdapter(private val context: Context, private val categoryItem :List<Video>) : RecyclerView.Adapter<CategoryItemAdapter.CategoryItemViewHolder>(){
 
@@ -35,5 +40,16 @@ class CategoryItemAdapter(private val context: Context, private val categoryItem
 
         val itemImage : ImageView = itemView.findViewById(R.id.item_image)
         var itemTitle : TextView = itemView.findViewById(R.id.textView5)
+
+        init {
+            itemView.setOnClickListener {
+                val video = categoryItem[adapterPosition]
+                val intent = Intent(context, ShowVideo::class.java)
+                intent.putExtra("title", video.title)
+                intent.putExtra("url", video.url)
+                context.startActivity(intent)
+               // Toast.makeText(context,"Video :${video.title}", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }

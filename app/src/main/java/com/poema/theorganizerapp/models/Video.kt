@@ -1,4 +1,4 @@
-package com.poema.theorganizerapp.dataClasses
+package com.poema.theorganizerapp.models
 
 class Video(
     val title:String = "",

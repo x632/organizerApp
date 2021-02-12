@@ -10,7 +10,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.poema.theorganizerapp.R
-import com.poema.theorganizerapp.dataClasses.VideosGlobal
+import com.poema.theorganizerapp.models.VideosGlobal
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
 import okhttp3.OkHttpClient
