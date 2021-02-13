@@ -86,20 +86,15 @@ class AddVideoProps : AppCompatActivity() {
                         }
                     }
                 }
-                println("!!!!Detta är titlarna: $groupTitles")
+
                 val adapter = ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item,groupTitles)
                 mySpinner.adapter = adapter
                 mySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
                     override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long) {
                        groupTitle = adapterView?.getItemAtPosition(position).toString()
-
-                        //Toast.makeText(this@AddVideoProps,"$groupTitle selected", Toast.LENGTH_SHORT).show()
                     }
-
                     override fun onNothingSelected(p0: AdapterView<*>?) {
-
                     }
-
                 }
             }
             .addOnFailureListener { exception ->

@@ -1,6 +1,7 @@
 package com.poema.theorganizerapp.adapters
 
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -8,16 +9,22 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.poema.theorganizerapp.R
-import com.poema.theorganizerapp.activities.AddVideoProps
+import com.poema.theorganizerapp.activities.MainView
 import com.poema.theorganizerapp.activities.ShowVideo
 import com.poema.theorganizerapp.models.Video
 
+
 class CategoryItemAdapter(private val context: Context, private val categoryItem :List<Video>) : RecyclerView.Adapter<CategoryItemAdapter.CategoryItemViewHolder>(){
 
+
+    private var uid = ""
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryItemViewHolder {
         return CategoryItemViewHolder(LayoutInflater.from(context).inflate(R.layout.cat_row_items,parent,false))
@@ -40,16 +47,63 @@ class CategoryItemAdapter(private val context: Context, private val categoryItem
 
         val itemImage : ImageView = itemView.findViewById(R.id.item_image)
         var itemTitle : TextView = itemView.findViewById(R.id.textView5)
+        private val itemDeleteImage : ImageView = itemView.findViewById(R.id.deleteImageView)
 
         init {
+
             itemView.setOnClickListener {
                 val video = categoryItem[adapterPosition]
                 val intent = Intent(context, ShowVideo::class.java)
                 intent.putExtra("title", video.title)
                 intent.putExtra("url", video.url)
+                intent.putExtra("docId",video.docId)
                 context.startActivity(intent)
-               // Toast.makeText(context,"Video :${video.title}", Toast.LENGTH_SHORT).show()
+
+            }
+            itemDeleteImage.setOnClickListener{ view ->
+                val video = categoryItem[adapterPosition]
+                val dialogBuilder = AlertDialog.Builder(context)
+
+                dialogBuilder.setTitle("Remove video")
+                    .setMessage("Are you sure you want to remove this video?")
+                    //.setCancelable(false)
+
+                    .setIcon(0)
+                    .setPositiveButton("Remove video") { _, _ ->
+                        deleteVideo(video)
+                        Snackbar.make(view, "Video removed", Snackbar.LENGTH_SHORT).show()
+                    }
+                    .setNegativeButton("Cancel") { dialog, _ -> dialog.cancel()
+                    }
+
+                val alert = dialogBuilder.create()
+
+                alert.show()
             }
         }
+    }
+    private fun deleteVideo(video: Video){
+        val auth: FirebaseAuth = FirebaseAuth.getInstance()
+        val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+        val docId = video.docId
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            uid = auth.currentUser!!.uid
+        }
+            db.collection("users").document(uid).collection("videos").document(docId).delete()
+                .addOnSuccessListener{
+                    val msg="Video was successfully deleted from your database"
+                    showToast(msg)
+                    if (auth.currentUser != null) {
+                        uid = auth.currentUser!!.uid
+                    }
+                    val intent=Intent(context,MainView::class.java)
+                    context.startActivity(intent)
+                }
+                .addOnFailureListener {
+                }
+    }
+    private fun showToast(msg: String) {
+        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
     }
 }

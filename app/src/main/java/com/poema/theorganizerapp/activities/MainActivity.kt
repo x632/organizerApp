@@ -94,12 +94,9 @@ class MainActivity : AppCompatActivity() {
     private fun extractStuff(str:String, index2:Int):String{
         val index = matchDetails(words,str,0)
         val str = words.slice(index+index2..(index+200))
-        println("!!! Detta är strängen som följer:  $str")
         var delimiter = "\""
         val parts = str.split(delimiter)
-        val whatWasAskedFor = parts[0]
-        println("!!! Klippt vid citationstecken : ${parts[0]}")
-        return whatWasAskedFor
+        return parts[0]
     }
 
     private fun extractUrl(){

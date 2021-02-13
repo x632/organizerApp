@@ -10,40 +10,40 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/main_recycler"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginTop="16dp"
+        android:layout_height="match_parent"
         app:layout_constraintEnd_toEndOf="parent"
-
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addVideoBtn" />
+        app:layout_constraintTop_toBottomOf="parent"
 
-    <Button
-        android:id="@+id/addVideoBtn"
-        android:layout_width="140dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="26dp"
-        android:layout_marginBottom="16dp"
-        android:background="#e8ba74"
-        android:text="Add video"
-        app:layout_constraintBottom_toTopOf="@+id/main_recycler"
+        />
+
+
+
+    <ProgressBar
+        android:id="@+id/progressBar2"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="65dp"
+        android:layout_height="75dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="140dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="26dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="16dp"
-        android:background="#e8ba74"
-        android:text="Button"
-        app:layout_constraintBottom_toTopOf="@+id/main_recycler"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="61dp"
+        android:layout_height="58dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+
+        android:clickable="true"
+        android:cropToPadding="false"
+        app:backgroundTint="#D0BD8F"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:srcCompat="@drawable/ic_baseline_add_circle_24"
+        app:useCompatPadding="true" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

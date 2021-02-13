@@ -1,10 +1,12 @@
 package com.poema.theorganizerapp.adapters
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.poema.theorganizerapp.R
@@ -38,17 +40,15 @@ class VideoAdapter (private val context: Context, private val groups: List<Entir
 
     inner class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
 
-        var categoryTitle : TextView = itemView.findViewById(R.id.cat_title)
+        var categoryTitle: TextView = itemView.findViewById(R.id.cat_title)
         var itemRecycler: RecyclerView = itemView.findViewById(R.id.cat_item_recycler)
 
         init {
-           /* itemView.setOnClickListener {
-                val intent = Intent(context, IndividualVideo::class.java)
-                intent.putExtra("position", adapterPosition)
-                context.startActivity(intent)*/
+            itemView.setOnClickListener {
+                Toast.makeText(context, "position: $adapterPosition", Toast.LENGTH_LONG).show()
             }
+        }
     }
-
 }
 
 
