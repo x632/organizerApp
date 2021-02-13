@@ -1,7 +1,10 @@
 package com.poema.theorganizerapp.activities
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.Switch
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -22,6 +25,7 @@ class ShowVideo : AppCompatActivity() {
     lateinit var db: FirebaseFirestore
     private var uid: String = ""
 
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_video)
@@ -36,6 +40,19 @@ class ShowVideo : AppCompatActivity() {
         val url = intent.getStringExtra("url")
         val str = url!!.substringAfter("be/")
         val docId = intent.getStringExtra("docId")
+
+        val toggleButton = findViewById<Switch>(R.id.buttonToggle)
+        toggleButton.isChecked=false
+        toggleButton?.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked){
+                removeBtn.visibility = View.GONE
+                backBtn.visibility = View.GONE
+
+            }else{
+                removeBtn.visibility = View.VISIBLE
+                backBtn.visibility = View.VISIBLE
+            }
+        }
 
         println("!!!! strängen : $str")
         val youTubePlayerView: YouTubePlayerView = findViewById(R.id.youtube_player_view)

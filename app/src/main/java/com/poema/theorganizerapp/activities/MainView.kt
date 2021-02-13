@@ -5,6 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
+import android.widget.Switch
+import android.widget.Toast
+import android.widget.ToggleButton
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -42,6 +45,8 @@ class MainView : AppCompatActivity() {
         floatingActionButton.setOnClickListener(){
             goToAddVideo()
         }
+
+
     }
 
     private fun goToAddVideo() {
@@ -67,12 +72,12 @@ class MainView : AppCompatActivity() {
                 //sortera fram vilka grupptitlar som finns
                 for (i in 0 until videos.size) {
                     for (j in 0 until videos.size) {
-                        if (existingTitles.contains(videos[j].groupTitle)) {//gör inget
-                        }else{
-                            if (videos[i].groupTitle == videos[j].groupTitle){
+                        if (!existingTitles.contains(videos[j].groupTitle)) {
+                           if (videos[i].groupTitle == videos[j].groupTitle){
                                 existingTitles.add(videos[j].groupTitle)
                             }
                         }
+
                     }
                 }
                 //sortera in videos beroende på grupptitel
