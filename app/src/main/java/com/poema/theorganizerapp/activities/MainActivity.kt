@@ -1,38 +1,36 @@
 package com.poema.theorganizerapp.activities
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.poema.theorganizerapp.R
 import com.poema.theorganizerapp.models.VideosGlobal
+import com.poema.theorganizerapp.viewModels.MainActivityViewModel
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main_view.*
 import kotlinx.coroutines.*
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import java.io.IOException
 
 
 
 class MainActivity : AppCompatActivity() {
 
-
-    private val client = OkHttpClient()
-    lateinit var button: Button
-    private lateinit var job1: CompletableJob
+    //private lateinit var job1: CompletableJob
     private var words: String = ""
     private lateinit var spinner : ProgressBar
     private var url : String = ""
+    private lateinit var viewModel: MainActivityViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        viewModel = ViewModelProvider(this@MainActivity).get(MainActivityViewModel::class.java)
 
         searchBtn.setOnClickListener(){
             val searchTerm = searchInput.text.toString()
@@ -44,11 +42,26 @@ class MainActivity : AppCompatActivity() {
         }
         addUrl.setOnClickListener(){
             url = pastedUrl.text.toString();
-            println("!!! länken : $url")
-            webScratch()
+            viewModel.setUrl(url)
+            spinner = findViewById(R.id.progressBar)
+            spinner.visibility = View.VISIBLE
+            setStringObserver()
+
+
         }
     }
-    fun webScratch() {
+
+    private fun setStringObserver() {
+        viewModel.getWords().observe(this@MainActivity,
+            { t ->
+                words=t
+                spinner.visibility = View.GONE
+                extractUrl()
+            })
+    }
+
+
+   /* fun webScratch() {
         spinner = findViewById<ProgressBar>(R.id.progressBar)
         spinner.visibility = View.VISIBLE
         job1 = Job()
@@ -84,11 +97,10 @@ class MainActivity : AppCompatActivity() {
                 spinner.visibility = View.GONE
                     extractUrl()
             }
-    }
+    }*/
 
-    fun matchDetails(inputString: String, whatToFind: String, startIndex: Int = 0): Int {
-        val matchIndex = inputString.indexOf(whatToFind, startIndex)
-        return matchIndex
+    private fun matchDetails(inputString: String, whatToFind: String, startIndex: Int): Int {
+        return inputString.indexOf(whatToFind, startIndex)
     }
 
     private fun extractStuff(str:String, index2:Int):String{
@@ -140,4 +152,5 @@ class MainActivity : AppCompatActivity() {
             this, message,
             Toast.LENGTH_LONG).show()
     }
+
 }

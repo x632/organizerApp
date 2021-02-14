@@ -1,11 +1,10 @@
 package com.poema.theorganizerapp.viewModels
 
-import android.view.View
-import android.widget.ProgressBar
+
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.poema.theorganizerapp.R
 import com.poema.theorganizerapp.models.EntireCategory
 import com.poema.theorganizerapp.models.Video
 import com.poema.theorganizerapp.models.VideosGlobal
@@ -13,14 +12,17 @@ import com.poema.theorganizerapp.models.VideosGlobal
 class MainViewViewModel: ViewModel() {
 
     private var auth: FirebaseAuth = FirebaseAuth.getInstance()
-   private var db: FirebaseFirestore= FirebaseFirestore.getInstance()
+    private var db: FirebaseFirestore= FirebaseFirestore.getInstance()
     private var videos = mutableListOf<Video>()
     private var uid: String = ""
-    private var allGroups = mutableListOf<EntireCategory>()
+    private var allGroups = MutableLiveData<MutableList<EntireCategory>>()
+    private var allGroups1 = mutableListOf<EntireCategory>()
 
-    private fun getVideos() {
-        //val spinner = findViewById<ProgressBar>(R.id.progressBar2)
-        //spinner.visibility = View.VISIBLE
+    fun getVideos() {
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            uid = auth.currentUser!!.uid
+        }
         db.collection("users").document(uid).collection("videos")
             .get()
             .addOnSuccessListener { documents ->
@@ -43,7 +45,6 @@ class MainViewViewModel: ViewModel() {
                         }
                     }
                 }
-
                 val sortedExistingTitles = sortAlphabetically(existingTitles)
 
                 //sortera in videos beroende på grupptitel
@@ -54,26 +55,38 @@ class MainViewViewModel: ViewModel() {
                             vids2.add(videos[j])
                         }
                     }
-                    allGroups.add(EntireCategory(sortedExistingTitles[i], vids2))
+
+                    allGroups1.add(EntireCategory(sortedExistingTitles[i], vids2))
                     vids2 = mutableListOf() //obs! - går inte att tömma med clear!!
                 }
+                allGroups.value = allGroups1
+            }
+            .addOnFailureListener { exception ->
+                println("!!! Error getting users: $exception.message")
             }
     }
 
     private fun sortAlphabetically(titles: MutableList<String>):MutableList<String>{
-        var swap = true
-        while(swap){
-            swap = false
+        var lastWasSwapped = true
+        while(lastWasSwapped){
+            lastWasSwapped = false
             for(i in 0 until titles.size-1){
                 if(titles[i] > titles[i+1]){
                     val temp = titles[i]
                     titles[i] = titles[i+1]
                     titles[i + 1] = temp
-
-                    swap = true
+                    lastWasSwapped = true
                 }
             }
         }
         return titles
     }
+
+    fun getList(): MutableLiveData<MutableList<EntireCategory>> {
+        return allGroups
+    }
 }
+
+
+
+
