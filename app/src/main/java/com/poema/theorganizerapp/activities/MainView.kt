@@ -8,6 +8,7 @@ import android.widget.ProgressBar
 import android.widget.Switch
 import android.widget.Toast
 import android.widget.ToggleButton
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -16,6 +17,7 @@ import com.poema.theorganizerapp.models.Video
 import com.poema.theorganizerapp.adapters.VideoAdapter
 import com.poema.theorganizerapp.models.EntireCategory
 import com.poema.theorganizerapp.models.VideosGlobal.videosGlobal
+import com.poema.theorganizerapp.viewModels.MainViewViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_view.*
 import java.util.*
@@ -33,21 +35,21 @@ class MainView : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_view)
 
+        var viewModel = ViewModelProvider(this@MainView).get(MainViewViewModel::class.java)
+
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
         val currentUser = auth.currentUser
         if (currentUser != null) {
             uid = auth.currentUser!!.uid
         }
-
         getVideos()
-
         floatingActionButton.setOnClickListener(){
             goToAddVideo()
         }
-
-
     }
+
+
 
     private fun goToAddVideo() {
         val intent = Intent(this, MainActivity::class.java)
@@ -77,19 +79,21 @@ class MainView : AppCompatActivity() {
                                 existingTitles.add(videos[j].groupTitle)
                             }
                         }
-
                     }
                 }
+
+                val sortedExistingTitles = sortAlphabetically(existingTitles)
+
                 //sortera in videos beroende på grupptitel
                 var vids2 = mutableListOf<Video>()
-                for (i in 0 until existingTitles.size) {
+                for (i in 0 until sortedExistingTitles.size) {
                     for (j in 0 until videos.size) {
-                        if (videos[j].groupTitle == existingTitles[i]) {
+                        if (videos[j].groupTitle == sortedExistingTitles[i]) {
                             vids2.add(videos[j])
                         }
                     }
-                    allGroups.add(EntireCategory(existingTitles[i], vids2))
-                    vids2 = mutableListOf()
+                    allGroups.add(EntireCategory(sortedExistingTitles[i], vids2))
+                    vids2 = mutableListOf() //obs! - går inte att tömma med clear!!
                 }
 
                 initRecyclerView()
@@ -97,8 +101,25 @@ class MainView : AppCompatActivity() {
                 spinner.visibility = View.GONE
             }
             .addOnFailureListener { exception ->
-                println("!!! Error getting users: $exception")//blir ej error om den inte hittar någon träff.
+                println("!!! Error getting users: $exception.message")
             }
+    }
+
+    fun sortAlphabetically(titles: MutableList<String>):MutableList<String>{
+        var swap = true
+        while(swap){
+            swap = false
+            for(i in 0 until titles.size-1){
+                if(titles[i] > titles[i+1]){
+                    val temp = titles[i]
+                    titles[i] = titles[i+1]
+                    titles[i + 1] = temp
+
+                    swap = true
+                }
+            }
+        }
+        return titles
     }
 
 

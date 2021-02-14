@@ -21,7 +21,7 @@ import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
 
-    var uriUrl: Uri = Uri.parse("http://google.com/")
+
     private val client = OkHttpClient()
     lateinit var button: Button
     private lateinit var job1: CompletableJob
@@ -93,9 +93,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun extractStuff(str:String, index2:Int):String{
         val index = matchDetails(words,str,0)
-        val str = words.slice(index+index2..(index+200))
-        var delimiter = "\""
-        val parts = str.split(delimiter)
+        val stri = words.slice(index+index2..(index+200))
+        val delimiter = "\""
+        val parts = stri.split(delimiter)
         return parts[0]
     }
 

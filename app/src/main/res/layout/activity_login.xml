@@ -18,7 +18,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/pinkorganize" />
+        app:srcCompat="@drawable/background" />
 
     <EditText
         android:id="@+id/emailHolder"
