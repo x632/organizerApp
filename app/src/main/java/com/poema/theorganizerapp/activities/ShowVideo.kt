@@ -25,6 +25,7 @@ class ShowVideo : AppCompatActivity() {
     lateinit var db: FirebaseFirestore
     private var uid: String = ""
 
+
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

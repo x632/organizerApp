@@ -16,13 +16,11 @@ import kotlinx.android.synthetic.main.activity_main_view.*
 import kotlinx.coroutines.*
 
 
-
 class MainActivity : AppCompatActivity() {
 
-    //private lateinit var job1: CompletableJob
-    private var words: String = ""
     private lateinit var spinner : ProgressBar
     private var url : String = ""
+    private var data: String=""
     private lateinit var viewModel: MainActivityViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,95 +44,35 @@ class MainActivity : AppCompatActivity() {
             spinner = findViewById(R.id.progressBar)
             spinner.visibility = View.VISIBLE
             setStringObserver()
-
-
         }
     }
 
     private fun setStringObserver() {
-        viewModel.getWords().observe(this@MainActivity,
+        viewModel.getYouTubeString().observe(this@MainActivity,
             { t ->
-                words=t
+                data=t
                 spinner.visibility = View.GONE
                 extractUrl()
             })
     }
 
-
-   /* fun webScratch() {
-        spinner = findViewById<ProgressBar>(R.id.progressBar)
-        spinner.visibility = View.VISIBLE
-        job1 = Job()
-        job1.invokeOnCompletion {
-            it?.message.let {
-                var msg = it
-                if (msg.isNullOrBlank()) {
-                    msg = "Unknown cancellation error."
-                }
-                println("!!! $job1 was cancelled. Reason: ${msg}")
-            }
-        }
-
-        CoroutineScope(Dispatchers.IO + job1).launch {
-            val request = Request.Builder()
-                .url(url)
-                .build()
-
-            client.newCall(request).execute().use { response ->
-                if (!response.isSuccessful) throw IOException("Unexpected code $response")
-                words = response.body!!.string()
-            }
-            completionHandler()
-        }
-            }
-
-    private fun completionHandler() {
-            CoroutineScope(Dispatchers.Main)
-            .launch {
-                println("!!! Coroutine is finished")
-                job1.cancel(CancellationException("Reset job when done"))
-                println("!!!Job1 is cancelled")
-                spinner.visibility = View.GONE
-                    extractUrl()
-            }
-    }*/
-
-    private fun matchDetails(inputString: String, whatToFind: String, startIndex: Int): Int {
-        return inputString.indexOf(whatToFind, startIndex)
-    }
-
-    private fun extractStuff(str:String, index2:Int):String{
-        val index = matchDetails(words,str,0)
-        val stri = words.slice(index+index2..(index+200))
-        val delimiter = "\""
-        val parts = stri.split(delimiter)
-        return parts[0]
-    }
-
     private fun extractUrl(){
-        val imageUrl = extractStuff("og:image",19)
-
+        val imageUrl = viewModel.extractStuff("og:image",19, data)
         var msg = ""
         VideosGlobal.videosGlobal.forEach{
             if (imageUrl==it.imageUrl){
                 msg = "You already have this video!"
             }
         }
-
         if (msg ==""){
             Glide.with(this)
                 .load(imageUrl)//.apply(RequestOptions.circleCropTransform())
                 .into(imageView)
-            extractTitle(imageUrl)
+                val title = viewModel.extractTitle(data)
+                nextBtn.visibility = View.VISIBLE
+                nextScreen(imageUrl, title)
         }
         else showToast(msg)
-    }
-
-    private fun extractTitle(imageUrl:String){
-        val title = extractStuff("<meta name=\"title\" content=\"",28)
-        println("!!! Detta är titeln : $title")
-        nextBtn.visibility = View.VISIBLE
-        nextScreen(imageUrl, title)
     }
 
     private fun nextScreen(imageUrl:String, title:String) {
