@@ -18,7 +18,6 @@ import kotlinx.android.synthetic.main.activity_add_video_props.*
 class AddVideoProps : AppCompatActivity() {
 
     private var url : String? = null
-    private val groupTitles = mutableListOf<String>()
     private var groupTitle = ""
     private lateinit var viewModel: AddVideoPropsViewModel
 
@@ -32,9 +31,9 @@ class AddVideoProps : AppCompatActivity() {
         var title = intent.getStringExtra("title")
         val imageUrl = intent.getStringExtra("imageUrl")
 
-        setGroupTitleListObserver()
-        viewModel.getGroupsFromFirestore()
 
+        viewModel.getGroupsFromFirestore()
+        setGroupTitleListObserver()
         if (title != null){
         editTextTitle.hint = title
         }
@@ -55,7 +54,7 @@ class AddVideoProps : AppCompatActivity() {
 
     private fun setGroupTitleListObserver() {
         viewModel.getGroupTitles().observe(this@AddVideoProps, { t ->
-            val adapter = ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item,groupTitles)
+            val adapter = ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item,t)
             mySpinner.adapter = adapter
             mySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
                 override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long) {

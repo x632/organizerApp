@@ -48,14 +48,15 @@ class ShowVideo : AppCompatActivity() {
             if (isChecked){
                 removeBtn.visibility = View.GONE
                 backBtn.visibility = View.GONE
+                toggleButton.text=""
 
             }else{
                 removeBtn.visibility = View.VISIBLE
                 backBtn.visibility = View.VISIBLE
+                toggleButton.text = "show buttons"
             }
         }
 
-        println("!!!! strängen : $str")
         val youTubePlayerView: YouTubePlayerView = findViewById(R.id.youtube_player_view)
         lifecycle.addObserver(youTubePlayerView)
 
