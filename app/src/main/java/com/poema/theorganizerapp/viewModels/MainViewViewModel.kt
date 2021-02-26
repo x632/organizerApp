@@ -7,7 +7,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.poema.theorganizerapp.models.EntireCategory
 import com.poema.theorganizerapp.models.Video
-import com.poema.theorganizerapp.models.VideosGlobal
 import com.poema.theorganizerapp.models.VideosGlobal.videosGlobal
 
 class MainViewViewModel: ViewModel() {
@@ -27,17 +26,15 @@ class MainViewViewModel: ViewModel() {
         db.collection("users").document(uid).collection("videos")
             .get()
             .addOnSuccessListener { documents ->
-                videos = mutableListOf<Video>()
-                videosGlobal = mutableListOf<Video>()
+                videos = mutableListOf()
+                videosGlobal = mutableListOf()
                 for (document in documents) {
 
                     val temp = document!!.toObject(Video::class.java)
 
                     videos.add(temp)
-                    VideosGlobal.videosGlobal.add(temp)
+                    videosGlobal.add(temp)
                 }
-                println("!!!the global list :$videosGlobal")
-                // val immutableVideos = Collections.unmodifiableList(videos)
                 val existingTitles = mutableListOf<String>()
 
                 //sortera fram vilka grupptitlar som finns
@@ -54,7 +51,7 @@ class MainViewViewModel: ViewModel() {
 
                 //sortera in videos beroende på grupptitel
                 var vids2 = mutableListOf<Video>()
-                allGroups1 = mutableListOf<EntireCategory>()//måste tömmas såhär
+                allGroups1 = mutableListOf()//måste tömmas såhär
                 for (i in 0 until sortedExistingTitles.size) {
                     for (j in 0 until videos.size) {
                         if (videos[j].groupTitle == sortedExistingTitles[i]) {

@@ -13,7 +13,7 @@ import com.poema.theorganizerapp.R
 
 class Login : AppCompatActivity() {
 
-    lateinit var db : FirebaseFirestore
+    private lateinit var db : FirebaseFirestore
     private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {

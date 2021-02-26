@@ -18,12 +18,11 @@
         />
 
 
-
     <ProgressBar
         android:id="@+id/progressBar2"
-        style="?android:attr/progressBarStyle"
         android:layout_width="65dp"
         android:layout_height="75dp"
+        android:progressTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -38,11 +37,12 @@
 
         android:clickable="true"
         android:cropToPadding="false"
+        android:focusable="true"
         app:backgroundTint="#D0BD8F"
         app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_baseline_add_circle_24"
+        app:srcCompat="@drawable/ic_baseline_add_24"
         app:useCompatPadding="true" />
 
 
