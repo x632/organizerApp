@@ -1,12 +1,10 @@
 package com.poema.theorganizerapp.viewModels
 
-import android.content.Intent
+
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.poema.theorganizerapp.activities.MainView
-import com.poema.theorganizerapp.models.VideosGlobal
 
 class ShowVideoViewModel : ViewModel() {
 

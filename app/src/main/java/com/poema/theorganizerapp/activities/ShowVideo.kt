@@ -22,9 +22,7 @@ import kotlinx.android.synthetic.main.activity_show_video.*
 
 class ShowVideo : AppCompatActivity() {
 
-    private lateinit var auth: FirebaseAuth
-    lateinit var db: FirebaseFirestore
-    private var uid: String = ""
+
     private lateinit var viewModel: ShowVideoViewModel
 
     @SuppressLint("UseSwitchCompatOrMaterialCode")
@@ -70,8 +68,6 @@ class ShowVideo : AppCompatActivity() {
                 val intent = Intent(this, MainView::class.java)
                 startActivity(intent)
         }
-
-
     }
 
     private fun setRemoveFinishedObserver() {
