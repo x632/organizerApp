@@ -1,16 +1,18 @@
 package com.poema.theorganizerapp.viewModels
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 
-class LoginViewModel : ViewModel() {
+class LoginViewModel() : ViewModel() {
 
     private val auth = FirebaseAuth.getInstance()
     private var message = MutableLiveData<String>()
     private var isSignedIn = MutableLiveData<Boolean>()
     private var accountCreated = MutableLiveData<Boolean>()
+
 
     fun checkIfSignedIn():Boolean{
         val currentUser: FirebaseUser? = auth.currentUser
@@ -24,9 +26,9 @@ class LoginViewModel : ViewModel() {
         }
         else {
             auth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener { task ->
+                .addOnCompleteListener() { task ->
                     if (task.isSuccessful) {
-                        //toNextScreen()
+                        isSignedIn.value=true
                     } else {
                         message.value = ("signInWithEmail:failure - ${task.exception}")
                     }
@@ -45,7 +47,7 @@ class LoginViewModel : ViewModel() {
         }
         else{
             auth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener { task ->
+                .addOnCompleteListener{ task ->
                     if (task.isSuccessful) {
                         println("createUserWithEmail:success")
                         accountCreated.value = true

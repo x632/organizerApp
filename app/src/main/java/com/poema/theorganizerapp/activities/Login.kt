@@ -3,16 +3,10 @@ package com.poema.theorganizerapp.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.FirebaseFirestore
 import com.poema.theorganizerapp.R
 import com.poema.theorganizerapp.viewModels.LoginViewModel
-import com.poema.theorganizerapp.viewModels.MainActivityViewModel
 import kotlinx.android.synthetic.main.activity_login.*
 
 class Login : AppCompatActivity() {

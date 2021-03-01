@@ -8,6 +8,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.poema.theorganizerapp.R
 import com.poema.theorganizerapp.models.VideosGlobal
 import com.poema.theorganizerapp.viewModels.MainActivityViewModel
@@ -31,19 +33,30 @@ class MainActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this@MainActivity).get(MainActivityViewModel::class.java)
 
         searchBtn.setOnClickListener(){
+
             val searchTerm = searchInput.text.toString()
-            val intent = Intent(Intent.ACTION_SEARCH)
-            intent.setPackage("com.google.android.youtube")
-            intent.putExtra("query", searchTerm)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            startActivity(intent)
+            if (searchTerm != "") {
+                val intent = Intent(Intent.ACTION_SEARCH)
+                intent.setPackage("com.google.android.youtube")
+                intent.putExtra("query", searchTerm)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
+            } else showToast("You need to write a searchterm, first!")
+
         }
         addUrl.setOnClickListener(){
             url = pastedUrl.text.toString();
-            viewModel.setUrl(url)
-            spinner = findViewById(R.id.progressBar)
-            spinner.visibility = View.VISIBLE
-            setStringObserver()
+            if (url!="") {
+                viewModel.setUrl(url)
+                spinner = findViewById(R.id.progressBar)
+                spinner.visibility = View.VISIBLE
+                setStringObserver()
+            } else showToast("You need to paste a url, first!")
+        }
+        signOutBtn.setOnClickListener{
+            Firebase.auth.signOut()
+            val intent = Intent(this,Login::class.java)
+            startActivity(intent)
         }
     }
 
@@ -70,6 +83,7 @@ class MainActivity : AppCompatActivity() {
                 .into(imageView)
                 val title = viewModel.extractTitle(data)
                 nextBtn.visibility = View.VISIBLE
+                signOutBtn.visibility = View.GONE
                 nextScreen(imageUrl, title)
         }
         else showToast(msg)
