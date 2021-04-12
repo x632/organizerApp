@@ -103,25 +103,14 @@ class MainViewViewModel: ViewModel() {
                     }
             }
         }
-        //resturnera färdigsorterat
+        //returnera färdigsorterat
         return upperCaseArray
     }
 
     fun getList(): MutableLiveData<MutableList<EntireCategory>> {
         return allGroups
     }
-    fun main(args: Array<String>) {
-        val s1 = "abc"
-        val s2 = "Abc"
-        if (s1.equals(s2,true))
-        {
-            println("Equal")
-        }
-        else
-        {
-            println("Not Equal")
-        }
-    }
+
 }
 
 
