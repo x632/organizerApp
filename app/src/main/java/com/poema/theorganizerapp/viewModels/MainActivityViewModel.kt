@@ -8,11 +8,8 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.poema.theorganizerapp.activities.AddVideoProps
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import okhttp3.Request
 import java.io.IOException
 import okhttp3.OkHttpClient
@@ -29,6 +26,7 @@ class MainActivityViewModel : ViewModel(){
         val liveData = MutableLiveData<String>()
 
         CoroutineScope(Dispatchers.IO ).launch {
+
             val request = Request.Builder()
                 .url(url)
                 .build()
@@ -36,7 +34,8 @@ class MainActivityViewModel : ViewModel(){
             client.newCall(request).execute().use { response ->
                 if (!response.isSuccessful) throw IOException("Unexpected code $response")
                 val str = response.body!!.string()
-                withContext(Main){liveData.value = str}
+
+                withContext(Main) { liveData.value = str }
             }
         }
         return liveData

@@ -7,6 +7,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.poema.theorganizerapp.models.Video
 import kotlinx.android.synthetic.main.activity_add_video_props.*
+import java.lang.Exception
 
 class AddVideoPropsViewModel : ViewModel() {
 
@@ -68,7 +69,7 @@ class AddVideoPropsViewModel : ViewModel() {
                 isSaved.value = true
             }
             .addOnFailureListener {
-                println("!!! video was not saved")
+                println("!!! video was not saved! Exception: $it")
             }
     }
 

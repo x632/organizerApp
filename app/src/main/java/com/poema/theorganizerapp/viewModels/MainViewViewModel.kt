@@ -29,15 +29,13 @@ class MainViewViewModel: ViewModel() {
                 videos = mutableListOf()
                 videosGlobal = mutableListOf()
                 for (document in documents) {
-
                     val temp = document!!.toObject(Video::class.java)
-
                     videos.add(temp)
                     videosGlobal.add(temp)
                 }
                 val existingTitles = mutableListOf<String>()
 
-                //sortera fram vilka grupptitlar som finns
+                //sortera fram en av varje grupptitel.
                 for (i in 0 until videos.size) {
                     for (j in 0 until videos.size) {
                         if (!existingTitles.contains(videos[j].groupTitle)) {
@@ -47,6 +45,7 @@ class MainViewViewModel: ViewModel() {
                         }
                     }
                 }
+
                 val sortedExistingTitles = sortAlphabetically(existingTitles)
 
                 //sortera in videos beroende på grupptitel
@@ -70,23 +69,58 @@ class MainViewViewModel: ViewModel() {
     }
 
     private fun sortAlphabetically(titles: MutableList<String>):MutableList<String>{
-        var lastWasSwapped = true
-        while(lastWasSwapped){
-            lastWasSwapped = false
+        val lowerCaseArray  = mutableListOf<String>()
+        //gör om till bara små bokstäver
+        titles.forEach { title ->
+            var title2  = ""
+                for (t in title) {
+                    title2 += when {
+                        t.isUpperCase() -> t.toLowerCase()
+                        else -> t
+                    }
+                }
+            lowerCaseArray.add(title2)
+            }
+        // sortera arrayn med små bokstäver
+        var Swapped = true
+        while(Swapped){
+            Swapped = false
             for(i in 0 until titles.size-1){
-                if(titles[i] > titles[i+1]){
-                    val temp = titles[i]
-                    titles[i] = titles[i+1]
-                    titles[i + 1] = temp
-                    lastWasSwapped = true
+                if(lowerCaseArray[i] > lowerCaseArray[i+1]){
+                    val temp = lowerCaseArray[i]
+                    lowerCaseArray[i] = lowerCaseArray[i+1]
+                    lowerCaseArray[i + 1] = temp
+                    Swapped = true
                 }
             }
         }
-        return titles
+        // Skapa sorterad array som innehåller blandat versaler och gemener i enlighet med sorterade arrayn med små bokstäver
+        val upperCaseArray  = mutableListOf<String>()
+        lowerCaseArray.forEach(){ lC ->
+            titles.forEach() {title ->
+                    if (lC.equals(title, true)) {
+                        upperCaseArray.add(title)
+                    }
+            }
+        }
+        //resturnera färdigsorterat
+        return upperCaseArray
     }
 
     fun getList(): MutableLiveData<MutableList<EntireCategory>> {
         return allGroups
+    }
+    fun main(args: Array<String>) {
+        val s1 = "abc"
+        val s2 = "Abc"
+        if (s1.equals(s2,true))
+        {
+            println("Equal")
+        }
+        else
+        {
+            println("Not Equal")
+        }
     }
 }
 

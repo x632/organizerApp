@@ -26,7 +26,7 @@ class LoginViewModel() : ViewModel() {
         }
         else {
             auth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener() { task ->
+                .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         isSignedIn.value=true
                     } else {

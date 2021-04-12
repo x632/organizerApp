@@ -72,13 +72,6 @@ class AddVideoProps : AppCompatActivity() {
         })
     }
 
-/*    fun limitDropDownHeight(mySpinner: Spinner) {
-        val popup = Spinner::class.java.getDeclaredField("mPopup")
-        popup.isAccessible = true
-
-        val popupWindow = popup.get(mySpinner) as ListPopupWindow
-        popupWindow.height = (150 * resources.displayMetrics.density).toInt()
-    }*/
 
     private fun nextScreen() {
         Toast.makeText(this,"the video has been added to you database.",Toast.LENGTH_LONG).show()
