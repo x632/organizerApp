@@ -57,11 +57,11 @@ class MainViewViewModel: ViewModel() {
                             vids2.add(videos[j])
                         }
                     }
-
+                    //skapa hela kategoriobjekten med listorna av tillhörande videos
                     allGroups1.add(EntireCategory(sortedExistingTitles[i], vids2))
                     vids2 = mutableListOf() //obs! - går inte att tömma med clear!!
                 }
-                allGroups.value = allGroups1
+                allGroups.value = allGroups1 //ge grupperna till livedatat
             }
             .addOnFailureListener { exception ->
                 println("!!! Error getting users: $exception.message")
@@ -94,7 +94,8 @@ class MainViewViewModel: ViewModel() {
                 }
             }
         }
-        // Skapa sorterad array som innehåller blandat versaler och gemener i enlighet med sorterade arrayn med små bokstäver
+        // Skapa sorterad array som innehåller ursprungliga versaler och gemener
+        // i enlighet med sorterade arrayn med små bokstäver
         val upperCaseArray  = mutableListOf<String>()
         lowerCaseArray.forEach(){ lC ->
             titles.forEach() {title ->

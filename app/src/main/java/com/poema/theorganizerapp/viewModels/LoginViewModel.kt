@@ -39,11 +39,11 @@ class LoginViewModel() : ViewModel() {
     fun createAccount(email:String, password:String, password2 : String) {
         if (email == ""  || password == "" || password2 == ""){
             message.value ="Authentication failed - none of the fields can be empty"
-            //showMessage(mess)
+
         }
         else if (password != password2){
             message.value = "Passwords do not match."
-            //showMessage(mess)
+
         }
         else{
             auth.createUserWithEmailAndPassword(email, password)
@@ -51,14 +51,13 @@ class LoginViewModel() : ViewModel() {
                     if (task.isSuccessful) {
                         println("createUserWithEmail:success")
                         accountCreated.value = true
-                        //toNextScreen()
+
 
                     } else {
                         val eMess = "${task.exception}"
                         val errMess = eMess.substringAfter(":")
                         message.value = "Authentication failed - $errMess"
                         println(errMess)
-                        //showMessage(finalMessage)
                     }
                 }
         }
