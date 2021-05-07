@@ -1,7 +1,6 @@
 package com.poema.theorganizerapp.adapters
 
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -18,7 +17,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.poema.theorganizerapp.R
 import com.poema.theorganizerapp.activities.MainView
 import com.poema.theorganizerapp.activities.ShowVideo
-import com.poema.theorganizerapp.models.Video
+import com.poema.theorganizerapp.data.local.Video
 
 
 class CategoryItemAdapter(private val context: Context, private val categoryItem :List<Video>) : RecyclerView.Adapter<CategoryItemAdapter.CategoryItemViewHolder>(){

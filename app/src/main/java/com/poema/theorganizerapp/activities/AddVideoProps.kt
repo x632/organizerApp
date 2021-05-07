@@ -6,13 +6,10 @@ import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.lifecycle.ViewModelProvider
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.poema.theorganizerapp.R
 import com.poema.theorganizerapp.R.layout.activity_add_video_props
-import com.poema.theorganizerapp.models.Video
+import com.poema.theorganizerapp.data.local.Video
 import com.poema.theorganizerapp.viewModels.AddVideoPropsViewModel
-import com.poema.theorganizerapp.viewModels.MainActivityViewModel
 import kotlinx.android.synthetic.main.activity_add_video_props.*
 
 class AddVideoProps : AppCompatActivity() {
@@ -45,9 +42,8 @@ class AddVideoProps : AppCompatActivity() {
             if (editTextTitle.text.toString()!=""){
                 title = editTextTitle.text.toString()
             }
-            val searchTerm1 = editTextTerm1.text.toString()
-            val searchTerm2 = editTextTerm2.text.toString()
-            val tempObject = Video(title!!,url!!, imageUrl!!,searchTerm1,searchTerm2,"tempId",groupTitle)
+
+            val tempObject = Video(title!!,url!!, imageUrl!!,"tempId",groupTitle,roomId=0)
             viewModel.saveToFirestore(tempObject)
         }
     }
