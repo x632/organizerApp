@@ -33,7 +33,7 @@ class AddVideoPropsViewModel : ViewModel() {
                     for (j in 0 until videos.size) {
                         if (!groupTitles.contains(videos[j].groupTitle)) {
                             if (videos[i].groupTitle == videos[j].groupTitle) {
-                                groupTitles.add(videos[j].groupTitle)
+                                groupTitles.add(videos[j].groupTitle!!)
                             }
                         }
                     }

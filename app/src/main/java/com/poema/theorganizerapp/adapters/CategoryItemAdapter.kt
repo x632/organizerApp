@@ -89,7 +89,7 @@ class CategoryItemAdapter(private val context: Context, private val categoryItem
         if (currentUser != null) {
             uid = auth.currentUser!!.uid
         }
-            db.collection("users").document(uid).collection("videos").document(docId).delete()
+            db.collection("users").document(uid).collection("videos").document(docId!!).delete()
                 .addOnSuccessListener{
                     val msg="Video was successfully deleted from your database"
                     showToast(msg)

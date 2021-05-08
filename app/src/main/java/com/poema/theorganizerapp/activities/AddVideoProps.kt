@@ -43,7 +43,7 @@ class AddVideoProps : AppCompatActivity() {
                 title = editTextTitle.text.toString()
             }
 
-            val tempObject = Video(title!!,url!!, imageUrl!!,"tempId",groupTitle,roomId=0)
+            val tempObject = Video(title!!,url!!, imageUrl!!,"tempId",groupTitle,0)
             viewModel.saveToFirestore(tempObject)
         }
     }

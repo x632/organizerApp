@@ -5,15 +5,17 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.poema.theorganizerapp.R
 import com.poema.theorganizerapp.adapters.VideoAdapter
+import com.poema.theorganizerapp.data.local.ViewModelFactory
 import com.poema.theorganizerapp.viewModels.MainViewViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_view.*
 import kotlinx.coroutines.*
 import java.util.*
+
 
 class MainView : AppCompatActivity() {
 
@@ -24,7 +26,8 @@ class MainView : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_view)
 
-        viewModel = ViewModelProvider(this@MainView).get(MainViewViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, ViewModelFactory(this@MainView))
+            .get(MainViewViewModel::class.java)
         val spinner = findViewById<ProgressBar>(R.id.progressBar2)
         viewModel.getVideos()
         setGroupListObserver(spinner)

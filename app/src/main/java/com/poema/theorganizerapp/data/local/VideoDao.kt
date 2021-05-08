@@ -1,18 +1,25 @@
 package com.poema.theorganizerapp.data.local
 
-import androidx.lifecycle.LiveData
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.Query
 
 @Dao
 interface VideoDao {
+    @Query("SELECT * FROM Video")
+    fun getAllVideos(): List<Video>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertVideo(video: Video)
+    @Insert
+    fun insert(video: Video):Long
 
     @Delete
-    suspend fun deleteVideo(video:Video)
+    fun delete(video: Video)
 
-    @Query("SELECT * FROM videos")
-    fun observeAllVideos(): LiveData<List<Video>>
+    @Query("DELETE FROM Video")
+    fun deleteAll()
+
+    @Query("SELECT * FROM Video WHERE docId = :uid LIMIT 1" )
+    fun findVideoByUid(uid: String) : Video
 
 }
