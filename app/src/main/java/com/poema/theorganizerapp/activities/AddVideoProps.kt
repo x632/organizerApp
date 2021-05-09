@@ -8,7 +8,7 @@ import android.widget.*
 import androidx.lifecycle.ViewModelProvider
 import com.poema.theorganizerapp.R
 import com.poema.theorganizerapp.R.layout.activity_add_video_props
-import com.poema.theorganizerapp.data.local.Video
+import com.poema.theorganizerapp.models.Video
 import com.poema.theorganizerapp.viewModels.AddVideoPropsViewModel
 import kotlinx.android.synthetic.main.activity_add_video_props.*
 

@@ -1,4 +1,4 @@
-package com.poema.theorganizerapp.data.local
+package com.poema.theorganizerapp.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

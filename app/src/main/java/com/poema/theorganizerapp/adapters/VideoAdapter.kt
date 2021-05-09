@@ -9,8 +9,8 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.poema.theorganizerapp.R
-import com.poema.theorganizerapp.data.local.EntireCategory
-import com.poema.theorganizerapp.data.local.Video
+import com.poema.theorganizerapp.models.EntireCategory
+import com.poema.theorganizerapp.models.Video
 
 class VideoAdapter (private val context: Context, private val groups: List<EntireCategory> ): RecyclerView.Adapter<VideoAdapter.ViewHolder>() {
 

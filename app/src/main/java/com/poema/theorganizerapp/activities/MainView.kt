@@ -4,12 +4,15 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.poema.theorganizerapp.R
 import com.poema.theorganizerapp.adapters.VideoAdapter
-import com.poema.theorganizerapp.data.local.ViewModelFactory
+import com.poema.theorganizerapp.utils.Utility
+import com.poema.theorganizerapp.utils.Utility.isInternetAvailable
+import com.poema.theorganizerapp.viewModels.ViewModelFactory
 import com.poema.theorganizerapp.viewModels.MainViewViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_view.*
@@ -34,7 +37,14 @@ class MainView : AppCompatActivity() {
         viewModel.getList()
 
         floatingActionButton.setOnClickListener(){
-            goToAddVideo()
+            val context = this
+            if(context.isInternetAvailable()){
+                goToAddVideo()
+            }
+            else {
+                val msg = "You cannot search YouTube without internet connection, please check your connection"
+                showToast(msg)
+            }
         }
     }
 
@@ -54,5 +64,9 @@ class MainView : AppCompatActivity() {
             videoAdapter.notifyDataSetChanged()
             spinner.visibility = View.GONE
         })
+    }
+
+    private fun showToast(msg: String) {
+        Toast.makeText(applicationContext, msg, Toast.LENGTH_LONG).show();
     }
 }

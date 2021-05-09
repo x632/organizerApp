@@ -1,15 +1,16 @@
-package com.poema.theorganizerapp.data.local
+package com.poema.theorganizerapp.database
 
 import android.content.Context
 import androidx.room.Room
+import com.poema.theorganizerapp.data.local.AppDatabase
 
 object VideosRoom {
     private lateinit var INSTANCE: AppDatabase
 
     fun getInstance(context: Context): AppDatabase {
-        if (!::INSTANCE.isInitialized) {
+        if (!VideosRoom::INSTANCE.isInitialized) {
             synchronized(AppDatabase::class) {
-                if (!::INSTANCE.isInitialized) {
+                if (!VideosRoom::INSTANCE.isInitialized) {
                     INSTANCE = Room.databaseBuilder(context.applicationContext,
                         AppDatabase::class.java,
                         "VideosRoom").fallbackToDestructiveMigration().build()

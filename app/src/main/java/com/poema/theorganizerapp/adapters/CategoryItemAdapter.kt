@@ -17,11 +17,11 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.poema.theorganizerapp.R
 import com.poema.theorganizerapp.activities.MainView
 import com.poema.theorganizerapp.activities.ShowVideo
-import com.poema.theorganizerapp.data.local.Video
+import com.poema.theorganizerapp.models.Video
+import com.poema.theorganizerapp.utils.Utility.isInternetAvailable
 
 
 class CategoryItemAdapter(private val context: Context, private val categoryItem :List<Video>) : RecyclerView.Adapter<CategoryItemAdapter.CategoryItemViewHolder>(){
-
 
     private var uid = ""
 
@@ -51,44 +51,58 @@ class CategoryItemAdapter(private val context: Context, private val categoryItem
         init {
 
             itemView.setOnClickListener {
-                val video = categoryItem[adapterPosition]
-                val intent = Intent(context, ShowVideo::class.java)
-                intent.putExtra("title", video.title)
-                intent.putExtra("url", video.url)
-                intent.putExtra("docId",video.docId)
-                context.startActivity(intent)
-
+                if(context.isInternetAvailable()) {
+                    val video = categoryItem[adapterPosition]
+                    val intent = Intent(context, ShowVideo::class.java)
+                    intent.putExtra("title", video.title)
+                    intent.putExtra("url", video.url)
+                    intent.putExtra("docId", video.docId)
+                    context.startActivity(intent)
+                }
+                else{
+                    val msg="the YouTube-stream is not cached, check your internet-connection"
+                    showToast(msg)
+                }
             }
+
             itemDeleteImage.setOnClickListener{ view ->
-                val video = categoryItem[adapterPosition]
-                val dialogBuilder = AlertDialog.Builder(context)
+                if(context.isInternetAvailable()) {
+                    val video = categoryItem[adapterPosition]
+                    val dialogBuilder = AlertDialog.Builder(context)
 
-                dialogBuilder.setTitle("Remove video")
-                    .setMessage("Are you sure you want to remove this video?")
-                    //.setCancelable(false)
+                    dialogBuilder.setTitle("Remove video")
+                        .setMessage("Are you sure you want to remove this video?")
+                        //.setCancelable(false)
 
-                    .setIcon(0)
-                    .setPositiveButton("Remove video") { _, _ ->
-                        deleteVideo(video)
-                        Snackbar.make(view, "Video removed", Snackbar.LENGTH_SHORT).show()
-                    }
-                    .setNegativeButton("Cancel") { dialog, _ -> dialog.cancel()
-                    }
+                        .setIcon(0)
+                        .setPositiveButton("Remove video") { _, _ ->
+                            deleteVideo(video)
+                            Snackbar.make(view, "Video removed", Snackbar.LENGTH_SHORT).show()
+                        }
+                        .setNegativeButton("Cancel") { dialog, _ ->
+                            dialog.cancel()
+                        }
 
-                val alert = dialogBuilder.create()
+                    val alert = dialogBuilder.create()
 
-                alert.show()
+                    alert.show()
+                }
+                else{
+                    val msg="Your online database has priority, therefore deleting can only be made with an active internetconnection"
+                    showToast(msg)
+                }
             }
         }
     }
     private fun deleteVideo(video: Video){
-        val auth: FirebaseAuth = FirebaseAuth.getInstance()
-        val db: FirebaseFirestore = FirebaseFirestore.getInstance()
-        val docId = video.docId
-        val currentUser = auth.currentUser
-        if (currentUser != null) {
-            uid = auth.currentUser!!.uid
-        }
+
+            val auth: FirebaseAuth = FirebaseAuth.getInstance()
+            val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+            val docId = video.docId
+            val currentUser = auth.currentUser
+            if (currentUser != null) {
+                uid = auth.currentUser!!.uid
+            }
             db.collection("users").document(uid).collection("videos").document(docId!!).delete()
                 .addOnSuccessListener{
                     val msg="Video was successfully deleted from your database"
@@ -102,7 +116,8 @@ class CategoryItemAdapter(private val context: Context, private val categoryItem
                 .addOnFailureListener {
                 }
     }
+
     private fun showToast(msg: String) {
-        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
     }
 }

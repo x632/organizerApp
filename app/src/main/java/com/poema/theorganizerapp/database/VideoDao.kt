@@ -1,9 +1,10 @@
-package com.poema.theorganizerapp.data.local
+package com.poema.theorganizerapp.database
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import com.poema.theorganizerapp.models.Video
 
 @Dao
 interface VideoDao {

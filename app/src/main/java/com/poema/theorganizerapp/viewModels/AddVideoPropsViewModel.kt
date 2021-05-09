@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.poema.theorganizerapp.data.local.Video
+import com.poema.theorganizerapp.models.Video
 
 class AddVideoPropsViewModel : ViewModel() {
 
