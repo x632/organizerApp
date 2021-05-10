@@ -88,7 +88,7 @@ class CategoryItemAdapter(private val context: Context, private val categoryItem
                     alert.show()
                 }
                 else{
-                    val msg="Your online database has priority, therefore deleting can only be made with an active internetconnection"
+                    val msg="Your online cloud database has priority, therefore deleting can only be made while online"
                     showToast(msg)
                 }
             }

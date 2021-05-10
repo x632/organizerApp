@@ -42,7 +42,7 @@ class MainView : AppCompatActivity() {
                 goToAddVideo()
             }
             else {
-                val msg = "You cannot search YouTube without internet connection, please check your connection"
+                val msg = "You cannot search YouTube without the internet, please check your connection"
                 showToast(msg)
             }
         }

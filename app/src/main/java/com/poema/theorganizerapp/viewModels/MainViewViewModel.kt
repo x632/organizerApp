@@ -97,26 +97,22 @@ class MainViewViewModel(context:Context) : ViewModel() {
             roomDb.clearAllTables()
             for (i in 0 until videos.size) {
                 val uid = "${videos[i].docId}"
-                // Dubbelkollar här ifall den asynkrona tömningen inte skulle ha hunnit ske, vilket den ska ha gjort!
-                // hängslen och livrem...
+                // Dubbelkollar nedan ifall den asynkrona tömningen inte skulle ha hunnit ske, vilket den ska ha gjort i och med coroutine!
+                // hängslen och livrem.
                 val numb = roomDb.videoDao().findVideoByUid(uid)
                 if (numb == null) { //numb blir i högsta grad null även om typen inte är nullbar!! IDE:t har fel här.
-                    println("!!!numb är visst : $numb!")
-                    println("!!! Document was not in cache!")
-                    val savedVideoNum = roomDb.videoDao().insert(videos[i])
-                    println("!!! Video: ${videos[i].title} with number $savedVideoNum has been saved in cache.")
-
-                } else {
-                    println("!!! Video: ${videos[i].docId} is already in cache number is $i")
-                   // println("!!! Arraysize is :${videos.size}")
+                    println("!!! numb är visst : $numb!")
+                    roomDb.videoDao().insert(videos[i])
                 }
             }
            var roomVideos: MutableList<Video> = mutableListOf()
             roomVideos = roomDb.videoDao().getAllVideos() as MutableList<Video>
+            var i = 0
             for (video in roomVideos){
-                println("!!!Videos total : ${video.docId}")
+                i ++
+                println("!!!Video in cache: ${video.title} nummer $i Grouptitle: ${video.groupTitle}")
             }
-            job!!.cancel()
+            job!!.cancel() //canclar för säkerhets skull jobbet p g a risk för minnesläckor i viewmodel
             println("!!! the Job :$job")
         }
     }
@@ -132,7 +128,7 @@ class MainViewViewModel(context:Context) : ViewModel() {
 
            videos = roomDb.videoDao().getAllVideos() as MutableList<Video>
            for (video in videos){
-               println("!!!Videos total : ${video.docId}")
+               println("!!! Hämtat från cache : ${video.title} från cache")
            }
 
            println("!!! the Job :$job")
