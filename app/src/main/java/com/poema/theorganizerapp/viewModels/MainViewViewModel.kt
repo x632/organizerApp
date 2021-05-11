@@ -26,8 +26,8 @@ class MainViewViewModel(context:Context) : ViewModel() {
     private var db: FirebaseFirestore= FirebaseFirestore.getInstance()
     private var videos = mutableListOf<Video>()
     private var uid: String = ""
-    private var allGroups = MutableLiveData<MutableList<EntireCategory>>()
-    private var allGroups1 = mutableListOf<EntireCategory>()
+    var allGroups = MutableLiveData<MutableList<EntireCategory>>()
+    var allGroups1 = mutableListOf<EntireCategory>()
     private var context : Context = context
 
     fun getVideos() {
@@ -48,7 +48,8 @@ class MainViewViewModel(context:Context) : ViewModel() {
                       videosGlobal.add(temp)
                   }
                   createCache()
-                  doSorting()
+                  doSorting(videos)
+                  allGroups.value = allGroups1 //ge grupperna till livedatat
 
               }
               .addOnFailureListener { exception ->
@@ -60,7 +61,7 @@ class MainViewViewModel(context:Context) : ViewModel() {
         }
     }
 
-    private fun doSorting(){
+    fun doSorting(videos: MutableList<Video>): MutableList<EntireCategory>{
        val existingTitles = mutableListOf<String>()
        for (i in 0 until videos.size) {
            for (j in 0 until videos.size) {
@@ -71,7 +72,6 @@ class MainViewViewModel(context:Context) : ViewModel() {
                }
            }
        }
-
        val sortedExistingTitles = sortAlphabetically(existingTitles)
 
        //sortera in videos beroende på grupptitel
@@ -87,7 +87,8 @@ class MainViewViewModel(context:Context) : ViewModel() {
            allGroups1.add(EntireCategory(sortedExistingTitles[i], vids2))
            vids2 = mutableListOf() //obs! - går inte att tömma med clear!!
        }
-       allGroups.value = allGroups1 //ge grupperna till livedatat
+       //allGroups.value = allGroups1 //ge grupperna till livedatat
+        return allGroups1
     }
 
     private fun createCache(){
@@ -133,7 +134,7 @@ class MainViewViewModel(context:Context) : ViewModel() {
 
            println("!!! the Job :$job")
            withContext(Main){
-               doSorting()
+               doSorting(videos)
                job!!.cancel()
            }
        }

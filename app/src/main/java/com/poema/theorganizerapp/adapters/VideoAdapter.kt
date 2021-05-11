@@ -23,7 +23,7 @@ class VideoAdapter (private val context: Context, private val groups: List<Entir
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         holder.categoryTitle.text=groups[position].categoryTitle
-        setCatItemRecycler(holder.itemRecycler, groups[position].categoryItem)
+        setCatItemRecycler(holder.itemRecycler, groups[position].categoryItems)
     }
 
     override fun getItemCount(): Int {

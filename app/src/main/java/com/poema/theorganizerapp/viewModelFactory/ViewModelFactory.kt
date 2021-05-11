@@ -1,8 +1,9 @@
-package com.poema.theorganizerapp.viewModels
+package com.poema.theorganizerapp.viewModelFactory
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.poema.theorganizerapp.viewModels.MainViewViewModel
 
 class ViewModelFactory(val context: Context) : ViewModelProvider.NewInstanceFactory() {
 

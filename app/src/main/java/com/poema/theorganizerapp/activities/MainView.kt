@@ -10,9 +10,8 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.poema.theorganizerapp.R
 import com.poema.theorganizerapp.adapters.VideoAdapter
-import com.poema.theorganizerapp.utils.Utility
 import com.poema.theorganizerapp.utils.Utility.isInternetAvailable
-import com.poema.theorganizerapp.viewModels.ViewModelFactory
+import com.poema.theorganizerapp.viewModelFactory.ViewModelFactory
 import com.poema.theorganizerapp.viewModels.MainViewViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_view.*
