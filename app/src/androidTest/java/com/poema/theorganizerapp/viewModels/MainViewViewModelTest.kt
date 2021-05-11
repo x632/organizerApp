@@ -27,8 +27,8 @@ class MainViewViewModelTest{
             listOf(Video("TitleOfVideo1","Anything","Anything","Anything",groupTitleA,0),
                 Video("TitleOfVideo2","Anything","Anything","Anything",groupTitleC,0),
                 Video("TitleOfVideo3","Anything","Anything","Anything",groupTitleA,0),
-                Video("TitleOfVideo3","Anything","Anything","Anything",groupTitleB,0),
-                Video("TitleOfVideo4","Anything","Anything","Anything",groupTitleC,0)).toMutableList()
+                Video("TitleOfVideo4","Anything","Anything","Anything",groupTitleB,0),
+                Video("TitleOfVideo5","Anything","Anything","Anything",groupTitleC,0)).toMutableList()
         resultList = viewModel.doSorting(testVideos)
     }
 
@@ -50,8 +50,18 @@ class MainViewViewModelTest{
         assertThat(resultList[0].categoryTitle < resultList[1].categoryTitle && resultList[1].categoryTitle < resultList[2].categoryTitle).isEqualTo(true)
     }
     @Test
-    fun checkIfCategoriesContainCorrectAmountOfVideos(){
+    fun checkIfSingleCategoriesContainCorrectAmountOfVideos(){
         assertThat(resultList[0].categoryItems.size == 2 && resultList[1].categoryItems.size == 1 && resultList[2].categoryItems.size == 2).isEqualTo(true)
+    }
+    @Test
+    fun checkIfTotalAmountOfVideosIsCorrect(){
+        var i = 0
+        for (category in resultList){
+            for(listItem in category.categoryItems){
+              i++
+            }
+        }
+        assertThat(i).isEqualTo(5)
     }
 }
 

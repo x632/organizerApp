@@ -18,7 +18,7 @@ import com.poema.theorganizerapp.utils.Utility.isInternetAvailable
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.Main
 
-class MainViewViewModel(context:Context) : ViewModel() {
+class MainViewViewModel(var context:Context) : ViewModel() {
 
     private var job: CompletableJob? = null
     private var roomDb: AppDatabase = VideosRoom.getInstance(context)
@@ -28,7 +28,7 @@ class MainViewViewModel(context:Context) : ViewModel() {
     private var uid: String = ""
     var allGroups = MutableLiveData<MutableList<EntireCategory>>()
     var allGroups1 = mutableListOf<EntireCategory>()
-    private var context : Context = context
+    //private var context : Context = context
 
     fun getVideos() {
         val currentUser = auth.currentUser
@@ -124,9 +124,6 @@ class MainViewViewModel(context:Context) : ViewModel() {
        videos = mutableListOf()
        videosGlobal = mutableListOf()
        CoroutineScope(Dispatchers.IO + job!!).launch {
-
-
-
            videos = roomDb.videoDao().getAllVideos() as MutableList<Video>
            for (video in videos){
                println("!!! Hämtat från cache : ${video.title} från cache")
@@ -135,10 +132,10 @@ class MainViewViewModel(context:Context) : ViewModel() {
            println("!!! the Job :$job")
            withContext(Main){
                doSorting(videos)
+               allGroups.value = allGroups1
                job!!.cancel()
            }
        }
-
    }
 
     private fun sortAlphabetically(titles: MutableList<String>):MutableList<String>{
