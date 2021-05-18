@@ -29,7 +29,7 @@ class MainViewViewModel(val context:Context) : ViewModel() {
     var allGroups = MutableLiveData<MutableList<EntireCategory>>()
     var allGroups1 = mutableListOf<EntireCategory>()
 
-    fun getVideos() {
+    fun getVideos(sort:Boolean?) {
         val currentUser = auth.currentUser
         if (currentUser != null) {
             uid = auth.currentUser!!.uid
@@ -45,10 +45,12 @@ class MainViewViewModel(val context:Context) : ViewModel() {
                       val temp = document!!.toObject<Video>() //(Video::class.java)
                       videos.add(temp)
                       videosGlobal.add(temp)
+                      println("!!! Videotitle:  ${temp.title}")
                   }
                   createCache()
                   doSorting(videos)
-                  doListSorting()
+                  if(sort!!){
+                  sortWithinGroups(allGroups1)}
                   allGroups.value = allGroups1 //ge grupperna till livedatat
 
               }
@@ -138,8 +140,36 @@ class MainViewViewModel(val context:Context) : ViewModel() {
        }
    }
 
-    private fun doListSorting() {
+    private fun sortWithinGroups(entireGroups : MutableList<EntireCategory>) {
 
+    var tempGroup = mutableListOf<String>()
+        val tempGroup2 = mutableListOf<Video>()
+        for (i in 0 until entireGroups.size) {
+            for (element in entireGroups[i].categoryItems) {
+               tempGroup.add(element.title!!)
+                println("!!! tempGroup : ${tempGroup}")
+                tempGroup2.add(element)
+                }
+            val sortedTitles = sortAlphabetically(tempGroup)
+            for (title in sortedTitles){println("!!! Sorted titles: $title") }
+            val sortedVideos = sortVideosAccordingToTitles(sortedTitles,tempGroup2)
+            tempGroup = mutableListOf<String>()
+            entireGroups[i].categoryItems = sortedVideos
+            }
+
+        allGroups1 = entireGroups
+    }
+
+    private fun sortVideosAccordingToTitles(sortedTitleStrings : MutableList<String>,VideosInGroup:MutableList<Video>):List<Video> {
+        var newListOfVids = mutableListOf<Video>()
+        for ( title in sortedTitleStrings){
+            for (video in VideosInGroup){
+                if (video.title!! == title){
+                        newListOfVids.add(video)
+                }
+            }
+        }
+        return newListOfVids
     }
 
 

@@ -40,19 +40,24 @@ class MainView : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         btnDrawer.setOnClickListener{drawerLayout.openDrawer(Gravity.LEFT)}
 
-
+        //drawerLayout.closeDrawer(GravityCompat.START);
         viewModel = ViewModelProviders.of(this, ViewModelFactory(this@MainView))
             .get(MainViewViewModel::class.java)
         navView.setNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.mItem1 -> { Firebase.auth.signOut()
                     val intent = Intent(this,Login::class.java)
-                    startActivity(intent)}
+                    startActivity(intent)
+                }
+                R.id.mItem2 -> { viewModel.getVideos(true)
+                }
+                R.id.mItem3 -> { //viewModel.sortByDateCreated()
+                }
             }
             true
         }
         val spinner = findViewById<ProgressBar>(R.id.progressBar2)
-        viewModel.getVideos()
+        viewModel.getVideos(false)
         setGroupListObserver(spinner)
         viewModel.getList()
 

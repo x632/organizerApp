@@ -44,7 +44,7 @@ class VideoAdapter (private val context: Context, private val groups: List<Entir
 
         init {
             itemView.setOnClickListener {
-                Toast.makeText(context, "position: $adapterPosition", Toast.LENGTH_LONG).show()
+
             }
         }
     }
