@@ -9,5 +9,5 @@
         android:title = "Sort alphabetically" />
     <item
         android:id="@+id/mItem3"
-        android:title = "Sort by date" />
+        android:title = "Sort by date added" />
 </menu>
