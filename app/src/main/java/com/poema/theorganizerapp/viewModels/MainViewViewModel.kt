@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
-import com.poema.theorganizerapp.data.local.AppDatabase
+import com.poema.theorganizerapp.database.AppDatabase
 import com.poema.theorganizerapp.models.EntireCategory
 import com.poema.theorganizerapp.models.Video
 import com.poema.theorganizerapp.database.VideosRoom
@@ -18,7 +18,7 @@ import com.poema.theorganizerapp.utils.Utility.isInternetAvailable
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.Main
 
-class MainViewViewModel(var context:Context) : ViewModel() {
+class MainViewViewModel(val context:Context) : ViewModel() {
 
     private var job: CompletableJob? = null
     private var roomDb: AppDatabase = VideosRoom.getInstance(context)
@@ -28,7 +28,6 @@ class MainViewViewModel(var context:Context) : ViewModel() {
     private var uid: String = ""
     var allGroups = MutableLiveData<MutableList<EntireCategory>>()
     var allGroups1 = mutableListOf<EntireCategory>()
-    //private var context : Context = context
 
     fun getVideos() {
         val currentUser = auth.currentUser
@@ -49,6 +48,7 @@ class MainViewViewModel(var context:Context) : ViewModel() {
                   }
                   createCache()
                   doSorting(videos)
+                  doListSorting()
                   allGroups.value = allGroups1 //ge grupperna till livedatat
 
               }
@@ -60,6 +60,7 @@ class MainViewViewModel(var context:Context) : ViewModel() {
             getFromCache()
         }
     }
+
 
     fun doSorting(videos: MutableList<Video>): MutableList<EntireCategory>{
        val existingTitles = mutableListOf<String>()
@@ -87,7 +88,6 @@ class MainViewViewModel(var context:Context) : ViewModel() {
            allGroups1.add(EntireCategory(sortedExistingTitles[i], vids2))
            vids2 = mutableListOf() //obs! - går inte att tömma med clear!!
        }
-       //allGroups.value = allGroups1 //ge grupperna till livedatat
         return allGroups1
     }
 
@@ -137,6 +137,11 @@ class MainViewViewModel(var context:Context) : ViewModel() {
            }
        }
    }
+
+    private fun doListSorting() {
+
+    }
+
 
     private fun sortAlphabetically(titles: MutableList<String>):MutableList<String>{
         val lowerCaseArray  = mutableListOf<String>()

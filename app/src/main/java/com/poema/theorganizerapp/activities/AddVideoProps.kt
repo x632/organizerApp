@@ -11,6 +11,9 @@ import com.poema.theorganizerapp.R.layout.activity_add_video_props
 import com.poema.theorganizerapp.models.Video
 import com.poema.theorganizerapp.viewModels.AddVideoPropsViewModel
 import kotlinx.android.synthetic.main.activity_add_video_props.*
+import java.security.Timestamp
+import java.text.SimpleDateFormat
+import java.util.*
 
 class AddVideoProps : AppCompatActivity() {
 
@@ -42,10 +45,19 @@ class AddVideoProps : AppCompatActivity() {
             if (editTextTitle.text.toString()!=""){
                 title = editTextTitle.text.toString()
             }
-
-            val tempObject = Video(title!!,url!!, imageUrl!!,"tempId",groupTitle,0)
+            val myDate = getCurrentDateTime()
+            val timeStamp = myDate.toString("yyyy-MM-dd HH:mm:ss.SSSSSS")
+            val tempObject = Video(timeStamp,title!!,url!!, imageUrl!!,"tempId",groupTitle,0)
             viewModel.saveToFirestore(tempObject)
         }
+
+    }
+    private fun getCurrentDateTime(): Date {
+        return Calendar.getInstance().time
+    }
+    private fun Date.toString(format: String, locale: Locale = Locale.getDefault()): String {
+        val formatter = SimpleDateFormat(format, locale)
+        return formatter.format(this)
     }
 
     private fun setGroupTitleListObserver() {
