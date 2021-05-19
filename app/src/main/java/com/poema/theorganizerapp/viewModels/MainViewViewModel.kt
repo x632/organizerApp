@@ -29,7 +29,7 @@ class MainViewViewModel(val context:Context) : ViewModel() {
     var allGroups = MutableLiveData<MutableList<EntireCategory>>()
     var allGroups1 = mutableListOf<EntireCategory>()
 
-    fun getVideos(sort:Boolean?) {
+    fun getVideos(sort:Boolean) {
         val currentUser = auth.currentUser
         if (currentUser != null) {
             uid = auth.currentUser!!.uid
@@ -49,8 +49,11 @@ class MainViewViewModel(val context:Context) : ViewModel() {
                   }
                   createCache()
                   doSorting(videos)
-                  if(sort!!){
+                  if(sort){
                   sortWithinGroups(allGroups1)}
+                  else{
+                      sortWithDateAdded(allGroups1)
+                  }
                   allGroups.value = allGroups1 //ge grupperna till livedatat
 
               }
@@ -101,7 +104,7 @@ class MainViewViewModel(val context:Context) : ViewModel() {
             for (i in 0 until videos.size) {
                 val uid = "${videos[i].docId}"
                 // Dubbelkollar nedan ifall den asynkrona tömningen inte skulle ha hunnit ske, vilket den ska ha gjort i och med coroutine!
-                // hängslen och livrem.
+                // hängslen och livrem..
                 val numb = roomDb.videoDao().findVideoByUid(uid)
                 if (numb == null) { //numb blir i högsta grad null även om typen inte är nullbar!! IDE:t har fel här.
                     println("!!! numb är visst : $numb!")
@@ -145,10 +148,9 @@ class MainViewViewModel(val context:Context) : ViewModel() {
     var tempGroup = mutableListOf<String>()
         val tempGroup2 = mutableListOf<Video>()
         for (i in 0 until entireGroups.size) {
-            for (element in entireGroups[i].categoryItems) {
-               tempGroup.add(element.title!!)
-                println("!!! tempGroup : ${tempGroup}")
-                tempGroup2.add(element)
+            for (item in entireGroups[i].categoryItems) {
+               tempGroup.add(item.title!!)
+                tempGroup2.add(item)
                 }
             val sortedTitles = sortAlphabetically(tempGroup)
             for (title in sortedTitles){println("!!! Sorted titles: $title") }
@@ -172,6 +174,51 @@ class MainViewViewModel(val context:Context) : ViewModel() {
         return newListOfVids
     }
 
+    private fun sortWithDateAdded(entireGroups : MutableList<EntireCategory>) {
+        var tempGroup = mutableListOf<String>()
+        val tempGroup2 = mutableListOf<Video>()
+        for (i in 0 until entireGroups.size) {
+            for (item in entireGroups[i].categoryItems) {
+                tempGroup.add(item.dateCreated!!)
+                tempGroup2.add(item)
+            }
+            val sortedDates = sortAlphabetically(tempGroup)
+            for (date in sortedDates){println("!!! Sorted dates: $date") }
+            val sortedVideos = sortVideosAccordingToDates(sortedDates,tempGroup2)
+            tempGroup = mutableListOf<String>()
+            entireGroups[i].categoryItems = sortedVideos
+        }
+        //reversera arrayn
+        var tempGroup3= mutableListOf<Video>()
+        for (i in 0 until entireGroups.size){
+            for (n in (entireGroups[i].categoryItems.size-1)downTo 0) {
+                tempGroup3.add(entireGroups[i].categoryItems[n])
+
+                }
+
+            entireGroups[i].categoryItems = tempGroup3
+            tempGroup3 = mutableListOf<Video>()
+        }
+        allGroups1 = entireGroups
+        for (i in  0 until allGroups1.size){
+            println("Category title ${allGroups1[i].categoryTitle}")
+            for (j in 0 until allGroups1[i].categoryItems.size) {
+                println("Item: ${allGroups1[i].categoryItems[j].title} with dateCreated : ${allGroups1[i].categoryItems[j].dateCreated}")
+            }
+        }
+    }
+
+    private fun sortVideosAccordingToDates(sortedDateStrings : MutableList<String>,VideosInGroup:MutableList<Video>):List<Video> {
+        var newListOfVids = mutableListOf<Video>()
+        for ( date in sortedDateStrings){
+            for (video in VideosInGroup){
+                if (video.dateCreated!! == date){
+                    newListOfVids.add(video)
+                }
+            }
+        }
+        return newListOfVids
+    }
 
     private fun sortAlphabetically(titles: MutableList<String>):MutableList<String>{
         val lowerCaseArray  = mutableListOf<String>()

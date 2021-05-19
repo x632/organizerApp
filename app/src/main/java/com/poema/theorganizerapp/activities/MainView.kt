@@ -51,7 +51,7 @@ class MainView : AppCompatActivity() {
                 }
                 R.id.mItem2 -> { viewModel.getVideos(true)
                 }
-                R.id.mItem3 -> { //viewModel.sortByDateCreated()
+                R.id.mItem3 -> { viewModel.getVideos(false)
                 }
             }
             true

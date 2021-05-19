@@ -82,7 +82,7 @@ class AddVideoProps : AppCompatActivity() {
 
 
     private fun nextScreen() {
-        Toast.makeText(this,"the video has been added to you database.",Toast.LENGTH_LONG).show()
+        Toast.makeText(this,"the video has been added to your database.",Toast.LENGTH_LONG).show()
         val intent = Intent(this, MainView::class.java)
         startActivity(intent)
     }

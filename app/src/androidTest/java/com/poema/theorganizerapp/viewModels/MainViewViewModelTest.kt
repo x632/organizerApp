@@ -24,11 +24,11 @@ class MainViewViewModelTest{
     viewModel =  MainViewViewModel(context)
         var testVideos : MutableList<Video> = mutableListOf()
         testVideos =
-            listOf(Video("TitleOfVideo1","Anything","Anything","Anything",groupTitleA,0),
-                Video("TitleOfVideo2","Anything","Anything","Anything",groupTitleC,0),
-                Video("TitleOfVideo3","Anything","Anything","Anything",groupTitleA,0),
-                Video("TitleOfVideo4","Anything","Anything","Anything",groupTitleB,0),
-                Video("TitleOfVideo5","Anything","Anything","Anything",groupTitleC,0)).toMutableList()
+            listOf(Video("anyDate","TitleOfVideo1","Anything","Anything","Anything",groupTitleA,0),
+                Video("anyDate","TitleOfVideo2","Anything","Anything","Anything",groupTitleC,0),
+                Video("anyDate","TitleOfVideo3","Anything","Anything","Anything",groupTitleA,0),
+                Video("anyDate","TitleOfVideo4","Anything","Anything","Anything",groupTitleB,0),
+                Video("anyDate","TitleOfVideo5","Anything","Anything","Anything",groupTitleC,0)).toMutableList()
         resultList = viewModel.doSorting(testVideos)
     }
 

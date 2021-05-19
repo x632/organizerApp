@@ -40,6 +40,7 @@ class MainActivityViewModel : ViewModel(){
         }
         return liveData
     }
+    //Nedan web-scratching funktioner
     fun matchDetails(inputString: String, whatToFind: String, startIndex: Int): Int {
         return inputString.indexOf(whatToFind, startIndex)
     }

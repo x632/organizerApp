@@ -74,7 +74,7 @@
         android:id="@+id/navView"
         android:background="#231E1B"
         app:itemTextColor="#FFFFFF"
-        android:layout_width="240dp"
+        android:layout_width="200dp"
         android:layout_height="match_parent"
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/nav_drawer_menu"
