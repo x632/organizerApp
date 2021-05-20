@@ -45,7 +45,6 @@ class MainViewViewModel(val context:Context) : ViewModel() {
                       val temp = document!!.toObject<Video>() //(Video::class.java)
                       videos.add(temp)
                       videosGlobal.add(temp)
-                      println("!!! Videotitle:  ${temp.title}")
                   }
                   createCache()
                   doSorting(videos)
@@ -144,7 +143,7 @@ class MainViewViewModel(val context:Context) : ViewModel() {
    }
 
     private fun sortWithinGroups(entireGroups : MutableList<EntireCategory>) {
-
+        println("!!! Sort alphabetically within groups")
     var tempGroup = mutableListOf<String>()
         val tempGroup2 = mutableListOf<Video>()
         for (i in 0 until entireGroups.size) {
@@ -153,7 +152,6 @@ class MainViewViewModel(val context:Context) : ViewModel() {
                 tempGroup2.add(item)
                 }
             val sortedTitles = sortAlphabetically(tempGroup)
-            for (title in sortedTitles){println("!!! Sorted titles: $title") }
             val sortedVideos = sortVideosAccordingToTitles(sortedTitles,tempGroup2)
             tempGroup = mutableListOf<String>()
             entireGroups[i].categoryItems = sortedVideos
@@ -163,7 +161,7 @@ class MainViewViewModel(val context:Context) : ViewModel() {
     }
 
     private fun sortVideosAccordingToTitles(sortedTitleStrings : MutableList<String>,VideosInGroup:MutableList<Video>):List<Video> {
-        var newListOfVids = mutableListOf<Video>()
+        val newListOfVids = mutableListOf<Video>()
         for ( title in sortedTitleStrings){
             for (video in VideosInGroup){
                 if (video.title!! == title){
@@ -175,6 +173,7 @@ class MainViewViewModel(val context:Context) : ViewModel() {
     }
 
     private fun sortWithDateAdded(entireGroups : MutableList<EntireCategory>) {
+        println("!!! Sorting with DATE within groups")
         var tempGroup = mutableListOf<String>()
         val tempGroup2 = mutableListOf<Video>()
         for (i in 0 until entireGroups.size) {
@@ -183,7 +182,6 @@ class MainViewViewModel(val context:Context) : ViewModel() {
                 tempGroup2.add(item)
             }
             val sortedDates = sortAlphabetically(tempGroup)
-            for (date in sortedDates){println("!!! Sorted dates: $date") }
             val sortedVideos = sortVideosAccordingToDates(sortedDates,tempGroup2)
             tempGroup = mutableListOf<String>()
             entireGroups[i].categoryItems = sortedVideos
@@ -199,13 +197,16 @@ class MainViewViewModel(val context:Context) : ViewModel() {
             entireGroups[i].categoryItems = tempGroup3
             tempGroup3 = mutableListOf<Video>()
         }
-        allGroups1 = entireGroups
-        for (i in  0 until allGroups1.size){
-            println("Category title ${allGroups1[i].categoryTitle}")
-            for (j in 0 until allGroups1[i].categoryItems.size) {
-                println("Item: ${allGroups1[i].categoryItems[j].title} with dateCreated : ${allGroups1[i].categoryItems[j].dateCreated}")
+        //skriver ut för att dubbelkolla att sorteringen är rätt
+        for (i in  0 until entireGroups.size){
+            println("!!! ${entireGroups[i].categoryTitle}")
+            for (j in 0 until entireGroups[i].categoryItems.size) {
+                println("!!! ITEM: ${entireGroups[i].categoryItems[j].title} DATE : ${entireGroups[i].categoryItems[j].dateCreated}")
             }
         }
+        allGroups1 = entireGroups
+
+
     }
 
     private fun sortVideosAccordingToDates(sortedDateStrings : MutableList<String>,VideosInGroup:MutableList<Video>):List<Video> {

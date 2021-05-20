@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         viewModel = ViewModelProvider(this@MainActivity).get(MainActivityViewModel::class.java)
-
+        setStringObserver()
         searchBtn.setOnClickListener(){
 
             val searchTerm = searchInput.text.toString()
@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
                 viewModel.setUrl(url)
                 spinner = findViewById(R.id.progressBar)
                 spinner.visibility = View.VISIBLE
-                setStringObserver()
+
             } else showToast("You need to paste a url, first!")
         }
         signOutBtn.setOnClickListener{

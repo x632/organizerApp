@@ -40,13 +40,16 @@ class MainActivityViewModel : ViewModel(){
         }
         return liveData
     }
-    //Nedan web-scratching funktioner
+    //Nedan grävs titeln och thumbnailbilden fram ur HTML-strängen
     fun matchDetails(inputString: String, whatToFind: String, startIndex: Int): Int {
         return inputString.indexOf(whatToFind, startIndex)
     }
 
     fun setUrl(url:String){
-        _url.value = url
+        if (_url.value != url){
+            _url.value = url
+        }
+
     }
 
     fun getYouTubeString():MutableLiveData<String>{

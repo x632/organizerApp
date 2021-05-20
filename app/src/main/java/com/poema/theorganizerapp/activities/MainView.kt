@@ -73,10 +73,6 @@ class MainView : AppCompatActivity() {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem):Boolean{
-        return super.onOptionsItemSelected(item)
-    }
-
     private fun goToAddVideo() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
@@ -88,7 +84,6 @@ class MainView : AppCompatActivity() {
                 layoutManager = LinearLayoutManager(this@MainView)
                 videoAdapter = VideoAdapter(this@MainView, t)
                 adapter = videoAdapter
-                println("!!!!Categories: $t")
             }
             videoAdapter.notifyDataSetChanged()
             spinner.visibility = View.GONE
@@ -97,5 +92,9 @@ class MainView : AppCompatActivity() {
 
     private fun showToast(msg: String) {
         Toast.makeText(applicationContext, msg, Toast.LENGTH_LONG).show();
+    }
+
+    override fun onBackPressed() {
+       showToast("You can´t go back here!")
     }
 }
