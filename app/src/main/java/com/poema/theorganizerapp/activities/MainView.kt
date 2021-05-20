@@ -49,15 +49,17 @@ class MainView : AppCompatActivity() {
                     val intent = Intent(this,Login::class.java)
                     startActivity(intent)
                 }
-                R.id.mItem2 -> { viewModel.getVideos(true)
+                R.id.mItem2 -> { viewModel.sortingAlphabetically=true
+                    viewModel.getVideos()
                 }
-                R.id.mItem3 -> { viewModel.getVideos(false)
+                R.id.mItem3 -> { viewModel.sortingAlphabetically=false
+                    viewModel.getVideos()
                 }
             }
             true
         }
         val spinner = findViewById<ProgressBar>(R.id.progressBar2)
-        viewModel.getVideos(false)
+        viewModel.getVideos()
         setGroupListObserver(spinner)
         viewModel.getList()
 
@@ -91,7 +93,7 @@ class MainView : AppCompatActivity() {
     }
 
     private fun showToast(msg: String) {
-        Toast.makeText(applicationContext, msg, Toast.LENGTH_LONG).show();
+        Toast.makeText(applicationContext, msg, Toast.LENGTH_LONG).show()
     }
 
     override fun onBackPressed() {

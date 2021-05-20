@@ -28,8 +28,9 @@ class MainViewViewModel(val context:Context) : ViewModel() {
     private var uid: String = ""
     var allGroups = MutableLiveData<MutableList<EntireCategory>>()
     var allGroups1 = mutableListOf<EntireCategory>()
+    var sortingAlphabetically :Boolean = false
 
-    fun getVideos(sort:Boolean) {
+    fun getVideos() {
         val currentUser = auth.currentUser
         if (currentUser != null) {
             uid = auth.currentUser!!.uid
@@ -48,7 +49,7 @@ class MainViewViewModel(val context:Context) : ViewModel() {
                   }
                   createCache()
                   doSorting(videos)
-                  if(sort){
+                  if(sortingAlphabetically){
                   sortWithinGroups(allGroups1)}
                   else{
                       sortWithDateAdded(allGroups1)
@@ -210,7 +211,7 @@ class MainViewViewModel(val context:Context) : ViewModel() {
     }
 
     private fun sortVideosAccordingToDates(sortedDateStrings : MutableList<String>,VideosInGroup:MutableList<Video>):List<Video> {
-        var newListOfVids = mutableListOf<Video>()
+        val newListOfVids = mutableListOf<Video>()
         for ( date in sortedDateStrings){
             for (video in VideosInGroup){
                 if (video.dateCreated!! == date){
