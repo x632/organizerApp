@@ -17,9 +17,13 @@ MainViewViewModelTest (com androidTest): testar största och viktigaste funktion
 
 Adapters: Det två recycleViewsadaptrarna som bildar den tvådimensionella huvudvyn.
 
-Utils: Sköter internetschecken
+Utils (singleton): Sköter internetschecken
 
 ViewModelFactory: Sköter dependencyInjection (context)
+
+Models: VideosGlobal, singleton som används för check för att man inte ska kunna lägga till en video som redan finns i ens bibliotek. 
+          EntireCategpory: Gruppklassen
+          Video: Videoklassen..
 
 
 
