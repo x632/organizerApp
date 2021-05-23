@@ -40,21 +40,22 @@ class MainActivityViewModel : ViewModel(){
         }
         return liveData
     }
-    //Nedan grävs titeln och thumbnailbilden fram ur HTML-strängen
-    fun matchDetails(inputString: String, whatToFind: String, startIndex: Int): Int {
-        return inputString.indexOf(whatToFind, startIndex)
-    }
 
     fun setUrl(url:String){
         if (_url.value != url){
             _url.value = url
         }
-
     }
 
     fun getYouTubeString():MutableLiveData<String>{
         return youTubeHtml
     }
+
+    //Nedan grävs titeln och thumbnailbild-Urlen fram ur HTML-strängen
+    fun matchDetails(inputString: String, whatToFind: String, startIndex: Int): Int {
+        return inputString.indexOf(whatToFind, startIndex)
+    }
+
     fun extractStuff(str:String, index2:Int,data:String):String{
         val index = matchDetails(data,str,0)
         val stri = data.slice(index+index2..(index+200))

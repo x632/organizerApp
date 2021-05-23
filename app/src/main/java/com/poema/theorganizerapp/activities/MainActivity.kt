@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
 
         }
         addUrl.setOnClickListener(){
-            url = pastedUrl.text.toString();
+            url = pastedUrl.text.toString()
             if (url!="") {
                 viewModel.setUrl(url)
                 spinner = findViewById(R.id.progressBar)
@@ -65,11 +65,11 @@ class MainActivity : AppCompatActivity() {
             { t ->
                 data=t
                 spinner.visibility = View.GONE
-                extractUrl()
+                extractImageUrl()
             })
     }
 
-    private fun extractUrl(){
+    private fun extractImageUrl(){
         val imageUrl = viewModel.extractStuff("og:image",19, data)
         var msg = ""
         VideosGlobal.videosGlobal.forEach{

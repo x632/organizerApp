@@ -20,7 +20,6 @@ import kotlinx.coroutines.Dispatchers.Main
 
 class MainViewViewModel(val context:Context) : ViewModel() {
 
-    private var job: CompletableJob? = null
     private var roomDb: AppDatabase = VideosRoom.getInstance(context)
     private var auth: FirebaseAuth = FirebaseAuth.getInstance()
     private var db: FirebaseFirestore= FirebaseFirestore.getInstance()
@@ -66,7 +65,7 @@ class MainViewViewModel(val context:Context) : ViewModel() {
         }
     }
 
-
+    //initial sortering in i grupper efter titel 
     fun doSorting(videos: MutableList<Video>): MutableList<EntireCategory>{
        val existingTitles = mutableListOf<String>()
        for (i in 0 until videos.size) {
@@ -97,48 +96,45 @@ class MainViewViewModel(val context:Context) : ViewModel() {
     }
 
     private fun createCache(){
-        job = Job()
-        println("!!! the Job :$job")
-        CoroutineScope(Dispatchers.IO + job!!).launch {
+        val job1 : CompletableJob = Job()
+        CoroutineScope(Dispatchers.IO + job1).launch {
             roomDb.clearAllTables()
             for (i in 0 until videos.size) {
                 val uid = "${videos[i].docId}"
-                // Dubbelkollar nedan ifall den asynkrona tömningen inte skulle ha hunnit ske, vilket den ska ha gjort i och med coroutine!
-                // hängslen och livrem..
                 val numb = roomDb.videoDao().findVideoByUid(uid)
-                if (numb == null) { //numb blir i högsta grad null även om typen inte är nullbar!! IDE:t har fel här.
+                if (numb == null) {
                     println("!!! numb är visst : $numb!")
                     roomDb.videoDao().insert(videos[i])
                 }
             }
-           var roomVideos: MutableList<Video> = mutableListOf()
+           var roomVideos = mutableListOf<Video>()
             roomVideos = roomDb.videoDao().getAllVideos() as MutableList<Video>
             var i = 0
             for (video in roomVideos){
                 i ++
                 println("!!!Video in cache: ${video.title} nummer $i Grouptitle: ${video.groupTitle}")
             }
-            job!!.cancel() //canclar för säkerhets skull jobbet p g a risk för minnesläckor i viewmodel
-            println("!!! the Job :$job")
+            job1.cancel() //canclar för säkerhets skull jobbet p g a risk för minnesläckor i viewmodel
+            println("!!! the Job :$job1")
         }
+        println("!!! the Job :$job1")
     }
 
    private fun getFromCache(){
-       job = Job()
-       println("!!! the Job :$job")
+       val job2 : CompletableJob = Job()
+       println("!!! the Job :$job2")
        videos = mutableListOf()
        videosGlobal = mutableListOf()
-       CoroutineScope(Dispatchers.IO + job!!).launch {
+       CoroutineScope(Dispatchers.IO + job2).launch {
            videos = roomDb.videoDao().getAllVideos() as MutableList<Video>
            for (video in videos){
                println("!!! Hämtat från cache : ${video.title} från cache")
            }
-
-           println("!!! the Job :$job")
            withContext(Main){
                doSorting(videos)
                allGroups.value = allGroups1
-               job!!.cancel()
+               job2.cancel()
+               println("!!! the Job :$job2")
            }
        }
    }
