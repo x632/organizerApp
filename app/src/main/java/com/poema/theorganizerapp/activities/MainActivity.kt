@@ -82,6 +82,7 @@ class MainActivity : AppCompatActivity() {
                 .load(imageUrl)//.apply(RequestOptions.circleCropTransform())
                 .into(imageView)
                 val title = viewModel.extractTitle(data)
+
                 nextBtn.visibility = View.VISIBLE
                 signOutBtn.visibility = View.GONE
                 nextScreen(imageUrl, title)

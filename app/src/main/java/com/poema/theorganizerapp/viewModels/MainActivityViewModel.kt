@@ -1,13 +1,8 @@
 package com.poema.theorganizerapp.viewModels
 
-import android.content.Intent
-import android.view.View
-import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import com.poema.theorganizerapp.activities.AddVideoProps
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.Main
 import okhttp3.Request
@@ -63,9 +58,25 @@ class MainActivityViewModel : ViewModel(){
         val parts = stri.split(delimiter)
         return parts[0]
     }
+    //extraherar rubriken
     fun extractTitle(data:String):String{
         val title = extractStuff("<meta name=\"title\" content=\"",28,data)
-        return title
+        return if (title.contains("&amp;")){
+            val cleanedTitle = removeHTMLAndChar(title)
+            cleanedTitle
+        } else {
+            title
+        }
+
+    }
+    private fun removeHTMLAndChar(title: String):String {
+      val delimiter= "&amp;"
+        val parts = title.split(delimiter)
+        var newTitle = ""
+        parts.forEach {part ->
+            newTitle += "$part&"
+        }
+        return newTitle.dropLast(1)
     }
 
 }

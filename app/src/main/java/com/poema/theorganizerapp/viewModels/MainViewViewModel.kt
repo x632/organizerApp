@@ -102,7 +102,7 @@ class MainViewViewModel(val context:Context) : ViewModel() {
             for (i in 0 until videos.size) {
                 val uid = "${videos[i].docId}"
                 val numb = roomDb.videoDao().findVideoByUid(uid)
-                if (numb == null) {
+                if (numb == null) { //IDE:t säger fel här. Blir visst null!
                     println("!!! numb är visst : $numb!")
                     roomDb.videoDao().insert(videos[i])
                 }
