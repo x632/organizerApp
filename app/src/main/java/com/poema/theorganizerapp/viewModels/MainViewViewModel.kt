@@ -110,10 +110,6 @@ class MainViewViewModel(val context:Context) : ViewModel() {
            var roomVideos = mutableListOf<Video>()
             roomVideos = roomDb.videoDao().getAllVideos() as MutableList<Video>
             var i = 0
-            for (video in roomVideos){
-                i ++
-                println("!!!Video in cache: ${video.title} nummer $i Grouptitle: ${video.groupTitle}")
-            }
             job1.cancel() //canclar för säkerhets skull jobbet p g a risk för minnesläckor i viewmodel
             println("!!! the Job :$job1")
         }
@@ -140,7 +136,7 @@ class MainViewViewModel(val context:Context) : ViewModel() {
    }
 
     private fun sortWithinGroups(entireGroups : MutableList<EntireCategory>) {
-        println("!!! Sort alphabetically within groups")
+
     var tempGroup = mutableListOf<String>()
         val tempGroup2 = mutableListOf<Video>()
         for (i in 0 until entireGroups.size) {
@@ -170,7 +166,7 @@ class MainViewViewModel(val context:Context) : ViewModel() {
     }
 
     private fun sortWithDateAdded(entireGroups : MutableList<EntireCategory>) {
-        println("!!! Sorting with DATE within groups")
+        
         var tempGroup = mutableListOf<String>()
         val tempGroup2 = mutableListOf<Video>()
         for (i in 0 until entireGroups.size) {
