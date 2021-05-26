@@ -1,6 +1,6 @@
 # organizerApp
 
-SplachScreen: Aktivitet som visar loggan - har ingen viewModel
+SplashScreen: Aktivitet som visar loggan - har ingen viewModel
 
 Login (& ViewModel med samma namn): Sköter alla inloggnings och registreringfunktioner. 
 
