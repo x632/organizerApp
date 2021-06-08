@@ -5,8 +5,7 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.toObject
+import com.poema.theorganizerapp.Repository
 import com.poema.theorganizerapp.database.AppDatabase
 import com.poema.theorganizerapp.models.EntireCategory
 import com.poema.theorganizerapp.models.Video
@@ -22,12 +21,12 @@ class MainViewViewModel(val context:Context) : ViewModel() {
 
     private var roomDb: AppDatabase = VideosRoom.getInstance(context)
     private var auth: FirebaseAuth = FirebaseAuth.getInstance()
-    private var db: FirebaseFirestore= FirebaseFirestore.getInstance()
     private var videos = mutableListOf<Video>()
     private var uid: String = ""
     var allGroups = MutableLiveData<MutableList<EntireCategory>>()
     var allGroups1 = mutableListOf<EntireCategory>()
     var sortingAlphabetically :Boolean = false
+    private val repository = Repository()
 
     fun getVideos() {
         val currentUser = auth.currentUser
@@ -35,35 +34,41 @@ class MainViewViewModel(val context:Context) : ViewModel() {
             uid = auth.currentUser!!.uid
         }
         if (context.isInternetAvailable()) {
+            CoroutineScope(Dispatchers.IO).launch {
+                videos = mutableListOf()
+                videosGlobal = mutableListOf()
 
-          db.collection("users").document(uid).collection("videos")
-              .get()
-              .addOnSuccessListener { documents ->
-                  videos = mutableListOf()
-                  videosGlobal = mutableListOf()
-                  for (document in documents) {
-                      val temp = document!!.toObject<Video>() //(Video::class.java)
-                      videos.add(temp)
-                      videosGlobal.add(temp)
-                  }
-                  createCache()
-                  doSorting(videos)
-                  if(sortingAlphabetically){
-                  sortWithinGroups(allGroups1)}
-                  else{
-                      sortWithDateAdded(allGroups1)
-                  }
-                  allGroups.value = allGroups1 //ge grupperna till livedatat
+                try {
+                    val documents = repository.getGroupsFromFirestore(uid)
 
-              }
-              .addOnFailureListener { exception ->
-                  println("!!! Error getting users: $exception.message")
-              }
+                    for (document in documents) {
+                        val temp = document.toObject(Video::class.java)
+                        if (temp != null) {
+                            videos.add(temp)
+                            videosGlobal.add(temp)
+                        }
+                    }
+                    withContext(Main) {
+                    createCache()
+                    doSorting(videos)
+                    if(sortingAlphabetically){
+                        sortWithinGroups(allGroups1)
+                    }
+                    else{
+                        sortWithDateAdded(allGroups1)
+                    }
+                        allGroups.value = allGroups1
+                    }
+                } catch (e: Exception) {
+                    e.message?.let { println("!!! $it") }
+                }
+            }
         }
         else {
             getFromCache()
         }
     }
+
 
     //initial sortering in i grupper efter titel 
     fun doSorting(videos: MutableList<Video>): MutableList<EntireCategory>{
@@ -107,11 +112,8 @@ class MainViewViewModel(val context:Context) : ViewModel() {
                     roomDb.videoDao().insert(videos[i])
                 }
             }
-           var roomVideos = mutableListOf<Video>()
-            roomVideos = roomDb.videoDao().getAllVideos() as MutableList<Video>
-            var i = 0
+
             job1.cancel() //canclar för säkerhets skull jobbet p g a risk för minnesläckor i viewmodel
-            println("!!! the Job :$job1")
         }
         println("!!! the Job :$job1")
     }

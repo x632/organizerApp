@@ -39,7 +39,7 @@ class Login : AppCompatActivity() {
 
             val email = emailHolder.text.toString()
             val password = passwordHolder.text.toString()
-            viewModel.login(email, password)
+            viewModel.login2(email, password)
         }
 
         val signedIn : Boolean = viewModel.checkIfSignedIn()
@@ -62,7 +62,7 @@ class Login : AppCompatActivity() {
     }
     private fun setMessageObserver(){
         viewModel.getMessage().observe(this@Login, { message ->
-            showMessage(message)
+            if (message!= "") {showMessage(message)}
         })
     }
 

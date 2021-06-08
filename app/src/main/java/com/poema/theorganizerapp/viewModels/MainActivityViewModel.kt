@@ -3,38 +3,16 @@ package com.poema.theorganizerapp.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.*
-import kotlinx.coroutines.Dispatchers.Main
-import okhttp3.Request
-import java.io.IOException
-import okhttp3.OkHttpClient
+import com.poema.theorganizerapp.Repository
+
 
 class MainActivityViewModel : ViewModel(){
 
-    private val client = OkHttpClient()
     private var _url : MutableLiveData<String> = MutableLiveData()
+
+    private val repository = Repository()
     private var youTubeHtml : MutableLiveData<String> = Transformations.switchMap(_url) {
-        getVideo(it)} as MutableLiveData<String>
-
-
-    private fun getVideo(url:String):MutableLiveData<String> {
-        val liveData = MutableLiveData<String>()
-
-        CoroutineScope(Dispatchers.IO ).launch {
-
-            val request = Request.Builder()
-                .url(url)
-                .build()
-             //avsedd blocking call!!
-            client.newCall(request).execute().use { response ->
-                if (!response.isSuccessful) throw IOException("Unexpected code $response")
-                val str = response.body!!.string()
-
-                withContext(Main) { liveData.value = str }
-            }
-        }
-        return liveData
-    }
+        repository.getYouTubeVideo(it)} as MutableLiveData<String>
 
     fun setUrl(url:String){
         if (_url.value != url){
@@ -47,7 +25,7 @@ class MainActivityViewModel : ViewModel(){
     }
 
     //Nedan grävs titeln och thumbnailbild-Urlen fram ur HTML-strängen
-    fun matchDetails(inputString: String, whatToFind: String, startIndex: Int): Int {
+    private fun matchDetails(inputString: String, whatToFind: String, startIndex: Int): Int {
         return inputString.indexOf(whatToFind, startIndex)
     }
 
@@ -58,7 +36,7 @@ class MainActivityViewModel : ViewModel(){
         val parts = stri.split(delimiter)
         return parts[0]
     }
-    //extraherar rubriken
+
     fun extractTitle(data:String):String{
         val title = extractStuff("<meta name=\"title\" content=\"",28,data)
         return if (title.contains("&amp;")){

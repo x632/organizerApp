@@ -76,6 +76,7 @@ class AddVideoProps : AppCompatActivity() {
 
     private fun setIsSavedObserver(){
         viewModel.getIsSaved().observe(this@AddVideoProps,{ t ->
+            println("!!! Varit här !!!!")
             if (t) nextScreen()
         })
     }
