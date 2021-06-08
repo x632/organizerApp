@@ -3,7 +3,7 @@ package com.poema.theorganizerapp.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import com.poema.theorganizerapp.Repository
+import com.poema.theorganizerapp.repository.Repository
 
 
 class MainActivityViewModel : ViewModel(){

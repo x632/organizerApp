@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this@MainActivity).get(MainActivityViewModel::class.java)
         setStringObserver()
-        searchBtn.setOnClickListener(){
+        searchBtn.setOnClickListener{
 
             val searchTerm = searchInput.text.toString()
             if (searchTerm != "") {
@@ -41,10 +41,10 @@ class MainActivity : AppCompatActivity() {
                 intent.putExtra("query", searchTerm)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
-            } else showToast("You need to write a searchterm, first!")
+            } else showToast("You need to write a search term, first!")
 
         }
-        addUrl.setOnClickListener(){
+        addUrl.setOnClickListener{
             url = pastedUrl.text.toString()
             if (url!="") {
                 viewModel.setUrl(url)
@@ -92,7 +92,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun nextScreen(imageUrl:String, title:String) {
 
-        nextBtn.setOnClickListener(){
+        nextBtn.setOnClickListener{
             val intent = Intent(this, AddVideoProps::class.java)
             intent.putExtra("title", title)
             intent.putExtra("url", url)

@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.poema.theorganizerapp.Repository
+import com.poema.theorganizerapp.repository.Repository
 
 class LoginViewModel() : ViewModel() {
 

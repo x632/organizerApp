@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.poema.theorganizerapp.Repository
+import com.poema.theorganizerapp.repository.Repository
 import com.poema.theorganizerapp.models.Video
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.Main

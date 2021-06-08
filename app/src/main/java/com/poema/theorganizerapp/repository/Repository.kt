@@ -1,4 +1,4 @@
-package com.poema.theorganizerapp
+package com.poema.theorganizerapp.repository
 
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
@@ -13,17 +13,18 @@ import kotlinx.coroutines.withContext
 import okhttp3.Request
 import java.io.IOException
 import okhttp3.OkHttpClient
-private val client = OkHttpClient()
+
 
 class Repository {
 
+    private val client = OkHttpClient()
     private var db: FirebaseFirestore = FirebaseFirestore.getInstance()
     private var auth: FirebaseAuth = FirebaseAuth.getInstance()
     var message = MutableLiveData<String>()
     var isSignedIn = MutableLiveData<Boolean>()
     var accountCreated = MutableLiveData<Boolean>()
-    val videos : MutableList<Video> = mutableListOf()
     var isSaved = MutableLiveData(false)
+    var isRemoved = MutableLiveData(false)
 
     fun login(email:String, password: String) {
         if (email == ""  || password == ""){
@@ -113,4 +114,14 @@ class Repository {
         return liveData
     }
 
+    fun removeVideo(uid: String, docId: String?) {
+
+        db.collection("users").document(uid).collection("videos").document(docId!!).delete()
+            .addOnSuccessListener{
+                isRemoved.value=true
+            }
+            .addOnFailureListener {
+
+            }
+    }
 }

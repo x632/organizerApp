@@ -5,7 +5,7 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
-import com.poema.theorganizerapp.Repository
+import com.poema.theorganizerapp.repository.Repository
 import com.poema.theorganizerapp.database.AppDatabase
 import com.poema.theorganizerapp.models.EntireCategory
 import com.poema.theorganizerapp.models.Video
@@ -178,7 +178,7 @@ class MainViewViewModel(val context:Context) : ViewModel() {
             }
             val sortedDates = sortAlphabetically(tempGroup)
             val sortedVideos = sortVideosAccordingToDates(sortedDates,tempGroup2)
-            tempGroup = mutableListOf<String>()
+            tempGroup = mutableListOf()
             entireGroups[i].categoryItems = sortedVideos
         }
         //reversera arrayn
@@ -190,7 +190,7 @@ class MainViewViewModel(val context:Context) : ViewModel() {
                 }
 
             entireGroups[i].categoryItems = tempGroup3
-            tempGroup3 = mutableListOf<Video>()
+            tempGroup3 = mutableListOf()
         }
         //skriver ut för att dubbelkolla att sorteringen är rätt
         for (i in  0 until entireGroups.size){
