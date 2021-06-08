@@ -101,7 +101,7 @@ class Repository {
             val request = Request.Builder()
                 .url(url)
                 .build()
-            //avsedd blocking call för att demonstrera coroutines!!
+            
             client.newCall(request).execute().use { response ->
                 if (!response.isSuccessful) throw IOException("Unexpected code $response")
                 val str = response.body!!.string()
