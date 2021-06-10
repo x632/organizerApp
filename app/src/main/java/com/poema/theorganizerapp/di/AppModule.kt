@@ -1,9 +1,8 @@
-package com.poema.theorganizerapp
+package com.poema.theorganizerapp.di
 
 import android.content.Context
 import androidx.room.Room
 import com.poema.theorganizerapp.database.AppDatabase
-import com.poema.theorganizerapp.repository.Repository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
