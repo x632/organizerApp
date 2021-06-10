@@ -52,7 +52,7 @@ class MainViewViewModel @Inject constructor(
                             videosGlobal.add(temp)
                         }
                     }
-                    prepCreateCache(videos)
+                    repo.createCache(videos)
                     doSorting(videos)
                     if(sortingAlphabetically){
                         sortWithinGroups(allGroups1)
@@ -83,11 +83,6 @@ class MainViewViewModel @Inject constructor(
         }
     }
 
-    private fun prepCreateCache(videos: MutableList<Video>) {
-     repo.createCache(videos)
-    }
-
-
     //initial sortering in i grupper efter titel 
     fun doSorting(videos: MutableList<Video>): MutableList<EntireCategory>{
        val existingTitles = mutableListOf<String>()
@@ -117,43 +112,6 @@ class MainViewViewModel @Inject constructor(
        }
         return allGroups1
     }
-
- /*   private fun createCache(){
-        val job1 : CompletableJob = Job()
-        CoroutineScope(Dispatchers.IO + job1).launch {
-            roomDb.clearAllTables()
-            for (i in 0 until videos.size) {
-                val uid = "${videos[i].docId}"
-                val numb = roomDb.videoDao().findVideoByUid(uid)
-                if (numb == null) { //IDE:t säger fel här. Blir visst null!
-                    println("!!! numb är visst : $numb!")
-                    roomDb.videoDao().insert(videos[i])
-                }
-            }
-
-            job1.cancel() //canclar för säkerhets skull jobbet p g a risk för minnesläckor i viewmodel
-        }
-        println("!!! the Job :$job1")
-    }*/
-
-   /*private fun getFromCache(){
-       val job2 : CompletableJob = Job()
-       println("!!! the Job :$job2")
-       videos = mutableListOf()
-       videosGlobal = mutableListOf()
-       CoroutineScope(Dispatchers.IO + job2).launch {
-           videos = roomDb.videoDao().getAllVideos() as MutableList<Video>
-           for (video in videos){
-               println("!!! Hämtat från cache : ${video.title} från cache")
-           }
-           withContext(Main){
-               doSorting(videos)
-               allGroups.value = allGroups1
-               job2.cancel()
-               println("!!! the Job :$job2")
-           }
-       }
-   }*/
 
     private fun sortWithinGroups(entireGroups : MutableList<EntireCategory>) {
 
