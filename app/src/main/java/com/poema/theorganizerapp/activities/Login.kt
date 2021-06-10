@@ -6,20 +6,23 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.poema.theorganizerapp.R
+import com.poema.theorganizerapp.viewModels.AddVideoPropsViewModel
 import com.poema.theorganizerapp.viewModels.LoginViewModel
+import com.poema.theorganizerapp.viewModels.MainActivityViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_login.*
-
+@AndroidEntryPoint
 class Login : AppCompatActivity() {
 
-
     private lateinit var viewModel: LoginViewModel
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        viewModel = ViewModelProvider(this@Login).get(LoginViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
 
         //val forgotPassword = findViewById<TextView>(R.id.forgotPassword)
 

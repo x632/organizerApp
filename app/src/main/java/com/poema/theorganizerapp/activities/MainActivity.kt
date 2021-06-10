@@ -12,12 +12,15 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.poema.theorganizerapp.R
 import com.poema.theorganizerapp.models.VideosGlobal
+import com.poema.theorganizerapp.viewModels.LoginViewModel
 import com.poema.theorganizerapp.viewModels.MainActivityViewModel
+import com.poema.theorganizerapp.viewModels.MainViewViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_view.*
 import kotlinx.coroutines.*
 
-
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var spinner : ProgressBar
@@ -30,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        viewModel = ViewModelProvider(this@MainActivity).get(MainActivityViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
         setStringObserver()
         searchBtn.setOnClickListener{
 

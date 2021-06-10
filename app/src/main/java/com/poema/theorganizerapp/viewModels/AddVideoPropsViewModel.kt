@@ -8,10 +8,14 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.poema.theorganizerapp.repository.Repository
 import com.poema.theorganizerapp.models.Video
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.Main
+import javax.inject.Inject
 
-class AddVideoPropsViewModel : ViewModel() {
+@HiltViewModel
+class AddVideoPropsViewModel @Inject constructor(
+    private val repository : Repository) : ViewModel() {
 
     var db : FirebaseFirestore = FirebaseFirestore.getInstance()
     private var auth: FirebaseAuth = FirebaseAuth.getInstance()
@@ -21,7 +25,7 @@ class AddVideoPropsViewModel : ViewModel() {
     private var liveTitles = MutableLiveData<MutableList<String>>()
 
 
-    private val repository = Repository()
+
 
     fun getGroupsFromFirestore() {
         val currentUser = auth.currentUser

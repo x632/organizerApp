@@ -1,45 +1,49 @@
 package com.poema.theorganizerapp.viewModels
 
 
-import android.content.Context
+
+
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.poema.theorganizerapp.repository.Repository
-import com.poema.theorganizerapp.database.AppDatabase
 import com.poema.theorganizerapp.models.EntireCategory
 import com.poema.theorganizerapp.models.Video
-import com.poema.theorganizerapp.database.VideosRoom
 import com.poema.theorganizerapp.models.VideosGlobal.videosGlobal
-import com.poema.theorganizerapp.utils.Utility.isInternetAvailable
+import dagger.hilt.android.lifecycle.HiltViewModel
+
 
 
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.Main
+import javax.inject.Inject
 
-class MainViewViewModel(val context:Context) : ViewModel() {
+@HiltViewModel
+class MainViewViewModel @Inject constructor(
+    private val repo: Repository,
 
-    private var roomDb: AppDatabase = VideosRoom.getInstance(context)
+) : ViewModel() {
+
     private var auth: FirebaseAuth = FirebaseAuth.getInstance()
     private var videos = mutableListOf<Video>()
     private var uid: String = ""
     var allGroups = MutableLiveData<MutableList<EntireCategory>>()
     var allGroups1 = mutableListOf<EntireCategory>()
     var sortingAlphabetically :Boolean = false
-    private val repository = Repository()
 
-    fun getVideos() {
+
+    fun getVideos(internetConnection:Boolean) {
         val currentUser = auth.currentUser
         if (currentUser != null) {
             uid = auth.currentUser!!.uid
         }
-        if (context.isInternetAvailable()) {
+        if (internetConnection) {
             CoroutineScope(Dispatchers.IO).launch {
                 videos = mutableListOf()
                 videosGlobal = mutableListOf()
 
                 try {
-                    val documents = repository.getGroupsFromFirestore(uid)
+                    val documents = repo.getGroupsFromFirestore(uid)
 
                     for (document in documents) {
                         val temp = document.toObject(Video::class.java)
@@ -48,8 +52,7 @@ class MainViewViewModel(val context:Context) : ViewModel() {
                             videosGlobal.add(temp)
                         }
                     }
-                    withContext(Main) {
-                    createCache()
+                    prepCreateCache(videos)
                     doSorting(videos)
                     if(sortingAlphabetically){
                         sortWithinGroups(allGroups1)
@@ -57,6 +60,7 @@ class MainViewViewModel(val context:Context) : ViewModel() {
                     else{
                         sortWithDateAdded(allGroups1)
                     }
+                        withContext(Main) {
                         allGroups.value = allGroups1
                     }
                 } catch (e: Exception) {
@@ -65,8 +69,22 @@ class MainViewViewModel(val context:Context) : ViewModel() {
             }
         }
         else {
-            getFromCache()
+            prepGetFromCache()
         }
+    }
+
+    private fun prepGetFromCache() {
+        CoroutineScope(Dispatchers.IO).launch {
+            videos = repo.getFromCache()
+            withContext(Main){
+                doSorting(videos)
+                allGroups.value = allGroups1
+            }
+        }
+    }
+
+    private fun prepCreateCache(videos: MutableList<Video>) {
+     repo.createCache(videos)
     }
 
 
@@ -100,7 +118,7 @@ class MainViewViewModel(val context:Context) : ViewModel() {
         return allGroups1
     }
 
-    private fun createCache(){
+ /*   private fun createCache(){
         val job1 : CompletableJob = Job()
         CoroutineScope(Dispatchers.IO + job1).launch {
             roomDb.clearAllTables()
@@ -116,9 +134,9 @@ class MainViewViewModel(val context:Context) : ViewModel() {
             job1.cancel() //canclar för säkerhets skull jobbet p g a risk för minnesläckor i viewmodel
         }
         println("!!! the Job :$job1")
-    }
+    }*/
 
-   private fun getFromCache(){
+   /*private fun getFromCache(){
        val job2 : CompletableJob = Job()
        println("!!! the Job :$job2")
        videos = mutableListOf()
@@ -135,7 +153,7 @@ class MainViewViewModel(val context:Context) : ViewModel() {
                println("!!! the Job :$job2")
            }
        }
-   }
+   }*/
 
     private fun sortWithinGroups(entireGroups : MutableList<EntireCategory>) {
 

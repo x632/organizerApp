@@ -20,7 +20,7 @@ interface VideoDao {
     @Query("DELETE FROM Video")
     fun deleteAll()
 
-    @Query("SELECT * FROM Video WHERE docId = :uid LIMIT 1" )
+    @Query("SELECT * FROM Video WHERE docId = :uid" )
     fun findVideoByUid(uid: String) : Video
 
 }

@@ -5,16 +5,17 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.*
+
 import androidx.lifecycle.ViewModelProvider
 import com.poema.theorganizerapp.R
 import com.poema.theorganizerapp.R.layout.activity_add_video_props
 import com.poema.theorganizerapp.models.Video
 import com.poema.theorganizerapp.viewModels.AddVideoPropsViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_add_video_props.*
-import java.security.Timestamp
 import java.text.SimpleDateFormat
 import java.util.*
-
+@AndroidEntryPoint
 class AddVideoProps : AppCompatActivity() {
 
     private var url : String? = null
@@ -25,7 +26,7 @@ class AddVideoProps : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(activity_add_video_props)
 
-        viewModel = ViewModelProvider(this@AddVideoProps).get(AddVideoPropsViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(AddVideoPropsViewModel::class.java)
 
         url = intent.getStringExtra("url")
         var title = intent.getStringExtra("title")

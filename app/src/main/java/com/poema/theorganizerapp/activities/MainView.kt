@@ -7,8 +7,10 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
+
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.ktx.auth
@@ -16,14 +18,15 @@ import com.google.firebase.ktx.Firebase
 import com.poema.theorganizerapp.R
 import com.poema.theorganizerapp.adapters.VideoAdapter
 import com.poema.theorganizerapp.utils.Utility.isInternetAvailable
-import com.poema.theorganizerapp.viewModelFactory.ViewModelFactory
+
 import com.poema.theorganizerapp.viewModels.MainViewViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_view.*
 import kotlinx.coroutines.*
 import java.util.*
 
-
+@AndroidEntryPoint
 class MainView : AppCompatActivity() {
 
     lateinit var toggle: ActionBarDrawerToggle
@@ -41,8 +44,10 @@ class MainView : AppCompatActivity() {
         btnDrawer.setOnClickListener{drawerLayout.openDrawer(Gravity.LEFT)}
 
         //drawerLayout.closeDrawer(GravityCompat.START);
-        viewModel = ViewModelProviders.of(this, ViewModelFactory(this@MainView))
-            .get(MainViewViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(MainViewViewModel::class.java)
+
+        /*viewModel = ViewModelProviders.of(this, ViewModelFactory(this@MainView))
+            .get(MainViewViewModel::class.java)*/
         navView.setNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.mItem1 -> { Firebase.auth.signOut()
@@ -50,16 +55,19 @@ class MainView : AppCompatActivity() {
                     startActivity(intent)
                 }
                 R.id.mItem2 -> { viewModel.sortingAlphabetically=true
-                    viewModel.getVideos()
+                    val internetConnection = this.isInternetAvailable()
+                    viewModel.getVideos(internetConnection)
                 }
                 R.id.mItem3 -> { viewModel.sortingAlphabetically=false
-                    viewModel.getVideos()
+                    val internetConnection = this.isInternetAvailable()
+                    viewModel.getVideos(internetConnection)
                 }
             }
             true
         }
         val spinner = findViewById<ProgressBar>(R.id.progressBar2)
-        viewModel.getVideos()
+        val internetConnection = this.isInternetAvailable()
+        viewModel.getVideos(internetConnection)
         setGroupListObserver(spinner)
         viewModel.getList()
 

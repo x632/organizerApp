@@ -12,16 +12,19 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import com.poema.theorganizerapp.R
+import com.poema.theorganizerapp.viewModels.MainActivityViewModel
+import com.poema.theorganizerapp.viewModels.MainViewViewModel
 import com.poema.theorganizerapp.viewModels.ShowVideoViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_view.*
 import kotlinx.android.synthetic.main.activity_show_video.*
 
-
+@AndroidEntryPoint
 class ShowVideo : AppCompatActivity() {
 
-
     private lateinit var viewModel: ShowVideoViewModel
+
 
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,7 +35,7 @@ class ShowVideo : AppCompatActivity() {
         val str = url!!.substringAfter("be/")
         val docId = intent.getStringExtra("docId")
 
-        viewModel = ViewModelProvider(this@ShowVideo).get(ShowVideoViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(ShowVideoViewModel::class.java)
 
         val toggleButton = findViewById<Switch>(R.id.buttonToggle)
         toggleButton.isChecked=false

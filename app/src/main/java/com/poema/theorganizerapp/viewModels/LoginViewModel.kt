@@ -6,11 +6,15 @@ import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.poema.theorganizerapp.repository.Repository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class LoginViewModel() : ViewModel() {
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+    private val repository : Repository) : ViewModel() {
 
     private val auth = FirebaseAuth.getInstance()
-    val repository = Repository()
+
 
     fun checkIfSignedIn(): Boolean {
         val currentUser: FirebaseUser? = auth.currentUser

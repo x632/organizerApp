@@ -4,19 +4,22 @@ import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.poema.theorganizerapp.database.AppDatabase
 import com.poema.theorganizerapp.models.Video
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.poema.theorganizerapp.models.VideosGlobal.videosGlobal
+import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 import okhttp3.Request
 import java.io.IOException
 import okhttp3.OkHttpClient
+import javax.inject.Inject
+import javax.inject.Provider
+
+class Repository @Inject constructor(private val dbRoom: Provider<AppDatabase>){
 
 
-class Repository {
-
+    private val dao = dbRoom.get().videoDao()
     private val client = OkHttpClient()
     private var db: FirebaseFirestore = FirebaseFirestore.getInstance()
     private var auth: FirebaseAuth = FirebaseAuth.getInstance()
@@ -25,6 +28,46 @@ class Repository {
     var accountCreated = MutableLiveData<Boolean>()
     var isSaved = MutableLiveData(false)
     var isRemoved = MutableLiveData(false)
+
+    fun createCache(videos: MutableList<Video>){
+        val job1 : CompletableJob = Job()
+        CoroutineScope(Dispatchers.IO + job1).launch {
+
+            for (i in 0 until videos.size) {
+                val uid = "${videos[i].docId}"
+                val numb :Video = dao.findVideoByUid(uid)
+                if(numb!= null){println("!!! finns i databasen: ${numb.docId}")}
+                else{
+                    val number = dao.insert(videos[i])
+                    println("!!! ${videos[i].title} sparades i cache")
+                }
+            }
+
+            job1.cancel()
+        }
+        println("!!! the Job :$job1")
+    }
+
+    fun getFromCache(): MutableList<Video> {
+        val job2: CompletableJob = Job()
+        println("!!! the Job :$job2")
+        var videos = mutableListOf<Video>()
+        videosGlobal = mutableListOf()
+        videos = dao.getAllVideos() as MutableList<Video>
+        for (video in videos) {
+            println("!!! Hämtat från cache : ${video.title} från cache")
+        }
+
+        return videos
+          /*  withContext(Main) {
+                return@withContext(videos)
+                doSorting(videos)
+                allGroups.value = allGroups1
+                job2.cancel()
+                println("!!! the Job :$job2")
+            }*/
+        //}
+    }
 
     fun login(email:String, password: String) {
         if (email == ""  || password == ""){
@@ -101,12 +144,12 @@ class Repository {
             val request = Request.Builder()
                 .url(url)
                 .build()
-            
+
             client.newCall(request).execute().use { response ->
                 if (!response.isSuccessful) throw IOException("Unexpected code $response")
                 val str = response.body!!.string()
 
-                withContext(Dispatchers.Main) {
+                withContext(Main) {
                     liveData.value = str
                 }
             }
@@ -121,7 +164,6 @@ class Repository {
                 isRemoved.value=true
             }
             .addOnFailureListener {
-
             }
     }
 }
