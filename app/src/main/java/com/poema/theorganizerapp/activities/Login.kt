@@ -13,7 +13,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_login.*
 @AndroidEntryPoint
 class Login : AppCompatActivity() {
-
+//test av github som plötsligt krånglar..
     private lateinit var viewModel: LoginViewModel
 
 

@@ -57,22 +57,12 @@ class Repository @Inject constructor(private val dbRoom: Provider<AppDatabase>){
         for (video in videos) {
             println("!!! Hämtat från cache : ${video.title} från cache")
         }
-
         return videos
-          /*  withContext(Main) {
-                return@withContext(videos)
-                doSorting(videos)
-                allGroups.value = allGroups1
-                job2.cancel()
-                println("!!! the Job :$job2")
-            }*/
-        //}
     }
 
     fun login(email:String, password: String) {
         if (email == ""  || password == ""){
             message.value = "Authentication failed - you need to fill in both email and password"
-            //showMessage(mess)
         }
         else {
             auth.signInWithEmailAndPassword(email, password)
