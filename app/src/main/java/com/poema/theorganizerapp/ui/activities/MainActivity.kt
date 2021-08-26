@@ -1,4 +1,4 @@
-package com.poema.theorganizerapp.activities
+package com.poema.theorganizerapp.ui.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,9 +12,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.poema.theorganizerapp.R
 import com.poema.theorganizerapp.models.VideosGlobal
-import com.poema.theorganizerapp.viewModels.LoginViewModel
-import com.poema.theorganizerapp.viewModels.MainActivityViewModel
-import com.poema.theorganizerapp.viewModels.MainViewViewModel
+import com.poema.theorganizerapp.ui.viewmodels.MainActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_view.*
@@ -68,6 +66,7 @@ class MainActivity : AppCompatActivity() {
             { t ->
                 data=t
                 spinner.visibility = View.GONE
+                println("!!! $data")
                 extractImageUrl()
             })
     }

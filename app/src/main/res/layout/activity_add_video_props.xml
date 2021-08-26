@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#917B5B"
-    tools:context=".activities.AddVideoProps">
+    tools:context=".ui.activities.AddVideoProps">
 
     <androidx.appcompat.widget.AppCompatSpinner
         android:id="@+id/mySpinner"

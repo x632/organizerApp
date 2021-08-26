@@ -13,18 +13,18 @@
         android:roundIcon="@mipmap/app_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".activities.Splash">
+        <activity android:name="com.poema.theorganizerapp.ui.activities.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.ShowVideo" />
-        <activity android:name=".activities.MainView" />
-        <activity android:name=".activities.MainActivity" />
-        <activity android:name=".activities.AddVideoProps" />
+        <activity android:name="com.poema.theorganizerapp.ui.activities.ShowVideo" />
+        <activity android:name="com.poema.theorganizerapp.ui.activities.MainView" />
+        <activity android:name="com.poema.theorganizerapp.ui.activities.MainActivity" />
+        <activity android:name="com.poema.theorganizerapp.ui.activities.AddVideoProps" />
         <activity
-            android:name=".activities.Login"
+            android:name="com.poema.theorganizerapp.ui.activities.Login"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>

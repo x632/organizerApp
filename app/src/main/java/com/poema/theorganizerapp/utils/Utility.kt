@@ -17,7 +17,7 @@ object Utility {
         }
     }
 
-    fun Context.showErrorToast(message: String?) {
+    private fun Context.showErrorToast(message: String?) {
 
         Toast.makeText(
             applicationContext, message,

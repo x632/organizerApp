@@ -1,15 +1,14 @@
-package com.poema.theorganizerapp.viewModels
-
-
-
+package com.poema.theorganizerapp.ui.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
-import com.poema.theorganizerapp.repository.Repository
 import com.poema.theorganizerapp.models.EntireCategory
 import com.poema.theorganizerapp.models.Video
 import com.poema.theorganizerapp.models.VideosGlobal.videosGlobal
+import com.poema.theorganizerapp.repositories.MainRepository
+import com.poema.theorganizerapp.repositories.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 
 
@@ -22,7 +21,7 @@ import javax.inject.Inject
 class MainViewViewModel @Inject constructor(
     private val repo: Repository,
 
-) : ViewModel() {
+    ) : ViewModel() {
 
     private var auth: FirebaseAuth = FirebaseAuth.getInstance()
     private var videos = mutableListOf<Video>()
@@ -38,7 +37,7 @@ class MainViewViewModel @Inject constructor(
             uid = auth.currentUser!!.uid
         }
         if (internetConnection) {
-            CoroutineScope(Dispatchers.IO).launch {
+            viewModelScope.launch {
                 videos = mutableListOf()
                 videosGlobal = mutableListOf()
 
@@ -157,7 +156,7 @@ class MainViewViewModel @Inject constructor(
             tempGroup = mutableListOf()
             entireGroups[i].categoryItems = sortedVideos
         }
-        //reversera arrayn
+
         var tempGroup3= mutableListOf<Video>()
         for (i in 0 until entireGroups.size){
             for (n in (entireGroups[i].categoryItems.size-1)downTo 0) {

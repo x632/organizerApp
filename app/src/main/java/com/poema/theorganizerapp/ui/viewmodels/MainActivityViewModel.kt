@@ -1,21 +1,21 @@
-package com.poema.theorganizerapp.viewModels
+package com.poema.theorganizerapp.ui.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import com.poema.theorganizerapp.repository.Repository
+import com.poema.theorganizerapp.repositories.MainRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
-    private val repository : Repository): ViewModel(){
+    private val mainRepository : MainRepository): ViewModel(){
 
     private var _url : MutableLiveData<String> = MutableLiveData()
 
 
     private var youTubeHtml : MutableLiveData<String> = Transformations.switchMap(_url) {
-        repository.getYouTubeVideo(it)} as MutableLiveData<String>
+        mainRepository.getYouTubeVideo(it)} as MutableLiveData<String>
 
     fun setUrl(url:String){
         if (_url.value != url){

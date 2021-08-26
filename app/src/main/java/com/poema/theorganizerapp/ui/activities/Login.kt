@@ -1,4 +1,4 @@
-package com.poema.theorganizerapp.activities
+package com.poema.theorganizerapp.ui.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -6,14 +6,12 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.poema.theorganizerapp.R
-import com.poema.theorganizerapp.viewModels.AddVideoPropsViewModel
-import com.poema.theorganizerapp.viewModels.LoginViewModel
-import com.poema.theorganizerapp.viewModels.MainActivityViewModel
+import com.poema.theorganizerapp.ui.viewmodels.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_login.*
 @AndroidEntryPoint
 class Login : AppCompatActivity() {
-//test av github som plötsligt krånglar..
+
     private lateinit var viewModel: LoginViewModel
 
 
@@ -30,7 +28,7 @@ class Login : AppCompatActivity() {
         setAccountCreatedObserver()
         setMessageObserver()
 
-        regBtn.setOnClickListener() {
+        regBtn.setOnClickListener{
 
             val email = emailHolder.text.toString()
             val password = passwordHolder.text.toString()
@@ -38,7 +36,7 @@ class Login : AppCompatActivity() {
             viewModel.createAccount(email, password, repeatedPassword)
         }
 
-        loginBtn.setOnClickListener(){
+        loginBtn.setOnClickListener{
 
             val email = emailHolder.text.toString()
             val password = passwordHolder.text.toString()

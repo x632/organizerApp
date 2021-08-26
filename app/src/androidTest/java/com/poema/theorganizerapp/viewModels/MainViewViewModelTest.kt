@@ -5,10 +5,15 @@ import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
 import com.poema.theorganizerapp.models.EntireCategory
 import com.poema.theorganizerapp.models.Video
+import com.poema.theorganizerapp.repositories.FakeRepository
+import com.poema.theorganizerapp.ui.viewmodels.MainViewViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 
+@AndroidEntryPoint
 class MainViewViewModelTest{
 
     private lateinit var viewModel : MainViewViewModel
@@ -21,7 +26,8 @@ class MainViewViewModelTest{
     @Before
     fun setup(){
     context = ApplicationProvider.getApplicationContext()
-    viewModel =  MainViewViewModel(context)
+
+        viewModel =  MainViewViewModel(FakeRepository())
         var testVideos : MutableList<Video> = mutableListOf()
         testVideos =
             listOf(Video("anyDate","TitleOfVideo1","Anything","Anything","Anything",groupTitleA,0),

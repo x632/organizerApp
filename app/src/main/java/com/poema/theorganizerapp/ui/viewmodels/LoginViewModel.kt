@@ -1,17 +1,17 @@
-package com.poema.theorganizerapp.viewModels
+package com.poema.theorganizerapp.ui.viewmodels
 
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.poema.theorganizerapp.repository.Repository
+import com.poema.theorganizerapp.repositories.MainRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val repository : Repository) : ViewModel() {
+    private val mainRepository : MainRepository) : ViewModel() {
 
     private val auth = FirebaseAuth.getInstance()
 
@@ -23,37 +23,37 @@ class LoginViewModel @Inject constructor(
 
     fun login2(email:String, password: String){
         if (email == ""  || password == "") {
-            repository.message.value = "Authentication failed - you need to fill in both email and password"
+            mainRepository.message.value = "Authentication failed - you need to fill in both email and password"
 
         }else{
-        repository.login(email, password)
+        mainRepository.login(email, password)
         }
     }
 
 
     fun createAccount(email:String, password:String, password2 : String) {
         if (email == ""  || password == "" || password2 == ""){
-            repository.message.value ="Authentication failed - none of the fields can be empty"
+            mainRepository.message.value ="Authentication failed - none of the fields can be empty"
 
         }
         else if (password != password2){
-            repository.message.value = "Passwords do not match."
+            mainRepository.message.value = "Passwords do not match."
         }
         else{
-            repository.createAccount(email, password)
+            mainRepository.createAccount(email, password)
         }
     }
 
     fun getIsSignedIn(): MutableLiveData<Boolean> {
-        return repository.isSignedIn
+        return mainRepository.isSignedIn
     }
 
     fun getAccountCreated():MutableLiveData<Boolean>{
-        return repository.accountCreated
+        return mainRepository.accountCreated
     }
 
     fun getMessage():MutableLiveData<String>{
-        return repository.message
+        return mainRepository.message
     }
 
 }

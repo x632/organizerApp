@@ -1,12 +1,12 @@
-package com.poema.theorganizerapp.viewModels
+package com.poema.theorganizerapp.ui.viewmodels
 
 
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.poema.theorganizerapp.repository.Repository
+import com.poema.theorganizerapp.repositories.MainRepository
 import com.poema.theorganizerapp.models.Video
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
@@ -15,9 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddVideoPropsViewModel @Inject constructor(
-    private val repository : Repository) : ViewModel() {
+    private val mainRepository : MainRepository) : ViewModel() {
 
-    var db : FirebaseFirestore = FirebaseFirestore.getInstance()
     private var auth: FirebaseAuth = FirebaseAuth.getInstance()
     var uid:String = ""
     private val videos = mutableListOf<Video>()
@@ -32,9 +31,9 @@ class AddVideoPropsViewModel @Inject constructor(
         if (currentUser != null) {
             uid = auth.currentUser!!.uid
         }
-        CoroutineScope(Dispatchers.IO).launch{
+        viewModelScope.launch{
             try {
-                    val documents = repository.getGroupsFromFirestore(uid)
+                    val documents = mainRepository.getGroupsFromFirestore(uid)
 
                 for (document in documents) {
                     val temp = document.toObject(Video::class.java)
@@ -54,18 +53,17 @@ class AddVideoPropsViewModel @Inject constructor(
                 withContext(Main){
                 liveTitles.value = groupTitles}
                 } catch (e: Exception) {
-                    e.message?.let { println("!!! $it") } //Don't ignore potential errors!
+                    e.message?.let { println("!!! $it") }
                 }
         }
     }
-
 
     fun saveToFirestore(video: Video) {
         val currentUser = auth.currentUser
         if (currentUser != null) {
             uid = auth.currentUser!!.uid
         }
-       repository.saveToFirestore(video,uid)
+       mainRepository.saveToFirestore(video,uid)
     }
 
     fun getGroupTitles():MutableLiveData<MutableList<String>>{
@@ -73,6 +71,6 @@ class AddVideoPropsViewModel @Inject constructor(
     }
 
     fun getIsSaved():MutableLiveData<Boolean>{
-        return repository.isSaved
+        return mainRepository.isSaved
     }
 }

@@ -1,4 +1,4 @@
-package com.poema.theorganizerapp.activities
+package com.poema.theorganizerapp.ui.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.poema.theorganizerapp.R
 import com.poema.theorganizerapp.R.layout.activity_add_video_props
 import com.poema.theorganizerapp.models.Video
-import com.poema.theorganizerapp.viewModels.AddVideoPropsViewModel
+import com.poema.theorganizerapp.ui.viewmodels.AddVideoPropsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_add_video_props.*
 import java.text.SimpleDateFormat
@@ -77,7 +77,6 @@ class AddVideoProps : AppCompatActivity() {
 
     private fun setIsSavedObserver(){
         viewModel.getIsSaved().observe(this@AddVideoProps,{ t ->
-            println("!!! Varit här !!!!")
             if (t) nextScreen()
         })
     }

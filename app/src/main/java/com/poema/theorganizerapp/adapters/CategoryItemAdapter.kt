@@ -15,8 +15,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.poema.theorganizerapp.R
-import com.poema.theorganizerapp.activities.MainView
-import com.poema.theorganizerapp.activities.ShowVideo
+import com.poema.theorganizerapp.ui.activities.MainView
+import com.poema.theorganizerapp.ui.activities.ShowVideo
 import com.poema.theorganizerapp.models.Video
 import com.poema.theorganizerapp.utils.Utility.isInternetAvailable
 
@@ -52,7 +52,7 @@ class CategoryItemAdapter(private val context: Context, private val categoryItem
 
             itemView.setOnClickListener {
                 if(context.isInternetAvailable()) {
-                    val video = categoryItem[adapterPosition]
+                    val video = categoryItem[absoluteAdapterPosition]
                     val intent = Intent(context, ShowVideo::class.java)
                     intent.putExtra("title", video.title)
                     intent.putExtra("url", video.url)
@@ -67,7 +67,7 @@ class CategoryItemAdapter(private val context: Context, private val categoryItem
 
             itemDeleteImage.setOnClickListener{ view ->
                 if(context.isInternetAvailable()) {
-                    val video = categoryItem[adapterPosition]
+                    val video = categoryItem[absoluteAdapterPosition]
                     val dialogBuilder = AlertDialog.Builder(context)
 
                     dialogBuilder.setTitle("Remove video")

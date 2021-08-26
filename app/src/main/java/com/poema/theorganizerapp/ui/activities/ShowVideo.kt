@@ -1,4 +1,4 @@
-package com.poema.theorganizerapp.activities
+package com.poema.theorganizerapp.ui.activities
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -12,9 +12,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import com.poema.theorganizerapp.R
-import com.poema.theorganizerapp.viewModels.MainActivityViewModel
-import com.poema.theorganizerapp.viewModels.MainViewViewModel
-import com.poema.theorganizerapp.viewModels.ShowVideoViewModel
+import com.poema.theorganizerapp.ui.viewmodels.ShowVideoViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_view.*
@@ -72,8 +70,8 @@ class ShowVideo : AppCompatActivity() {
     }
 
     private fun setRemoveFinishedObserver() {
-        viewModel.getIsRemoved().observe(this@ShowVideo, { t ->
-            if(t) {
+        viewModel.getIsRemoved().observe(this@ShowVideo, { removed ->
+            if(removed) {
                 val msg = "Video was successfully deleted from your database"
                 showToast(msg)
                 val intent = Intent(this, MainView::class.java)

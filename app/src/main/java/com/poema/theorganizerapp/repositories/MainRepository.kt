@@ -1,4 +1,4 @@
-package com.poema.theorganizerapp.repository
+package com.poema.theorganizerapp.repositories
 
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
@@ -16,8 +16,7 @@ import okhttp3.OkHttpClient
 import javax.inject.Inject
 import javax.inject.Provider
 
-class Repository @Inject constructor(private val dbRoom: Provider<AppDatabase>){
-
+class MainRepository @Inject constructor(dbRoom: Provider<AppDatabase>): Repository{
 
     private val dao = dbRoom.get().videoDao()
     private val client = OkHttpClient()
@@ -29,7 +28,7 @@ class Repository @Inject constructor(private val dbRoom: Provider<AppDatabase>){
     var isSaved = MutableLiveData(false)
     var isRemoved = MutableLiveData(false)
 
-    fun createCache(videos: MutableList<Video>){
+    override fun createCache(videos: MutableList<Video>){
         val job1 : CompletableJob = Job()
         CoroutineScope(Dispatchers.IO + job1).launch {
 
@@ -39,7 +38,7 @@ class Repository @Inject constructor(private val dbRoom: Provider<AppDatabase>){
                 if(numb!= null){println("!!! finns i databasen: ${numb.docId}")}
                 else{
                     val number = dao.insert(videos[i])
-                    println("!!! ${videos[i].title} sparades i cache")
+                    println("!!! ${videos[i].title} nummer $number sparades i cache")
                 }
             }
 
@@ -48,7 +47,7 @@ class Repository @Inject constructor(private val dbRoom: Provider<AppDatabase>){
         println("!!! the Job :$job1")
     }
 
-    fun getFromCache(): MutableList<Video> {
+    override fun getFromCache(): MutableList<Video> {
         val job2: CompletableJob = Job()
         println("!!! the Job :$job2")
         var videos = mutableListOf<Video>()
@@ -60,22 +59,19 @@ class Repository @Inject constructor(private val dbRoom: Provider<AppDatabase>){
         return videos
     }
 
-    fun login(email:String, password: String) {
-        if (email == ""  || password == ""){
-            message.value = "Authentication failed - you need to fill in both email and password"
-        }
-        else {
+    override fun login(email:String, password: String) {
+
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        message.value=""
+                        message.value="Successfully logged in"
                         isSignedIn.value=true
                     } else {
                         message.value = ("signInWithEmail:failure - ${task.exception}")
 
                     }
                 }
-        }
+
     }
 
     fun createAccount(email:String, password:String) {
@@ -83,7 +79,7 @@ class Repository @Inject constructor(private val dbRoom: Provider<AppDatabase>){
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener{ task ->
                 if (task.isSuccessful) {
-                    println("createUserWithEmail:success")
+                    message.value= "created user successfully"
                     accountCreated.value = true
 
                 } else {
@@ -95,12 +91,12 @@ class Repository @Inject constructor(private val dbRoom: Provider<AppDatabase>){
             }
     }
 
-    suspend fun getGroupsFromFirestore(uid:String): List<DocumentSnapshot> {
+    override suspend fun getGroupsFromFirestore(uid:String): List<DocumentSnapshot> {
         val snapshot = db.collection("users").document(uid).collection("videos").get().await()
         return snapshot.documents
     }
 
-    fun saveToFirestore(video: Video, id:String) {
+    override fun saveToFirestore(video: Video, id:String) {
         db.collection("users").document(id)
             .collection("videos").add(video)
             .addOnSuccessListener { documentReference ->
@@ -114,7 +110,7 @@ class Repository @Inject constructor(private val dbRoom: Provider<AppDatabase>){
             }
     }
 
-    private fun updateId(docId: String, id: String) {
+    override fun updateId(docId: String, id: String) {
         db.collection("users").document(id)
             .collection("videos").document(docId).update("docId",docId)
             .addOnSuccessListener {
@@ -126,7 +122,7 @@ class Repository @Inject constructor(private val dbRoom: Provider<AppDatabase>){
             }
     }
 
-    fun getYouTubeVideo(url:String):MutableLiveData<String> {
+    override fun getYouTubeVideo(url:String):MutableLiveData<String> {
         val liveData = MutableLiveData<String>()
 
         CoroutineScope(Dispatchers.IO ).launch {
@@ -134,7 +130,7 @@ class Repository @Inject constructor(private val dbRoom: Provider<AppDatabase>){
             val request = Request.Builder()
                 .url(url)
                 .build()
-
+            //är inom coroutine, kan vara blocking..
             client.newCall(request).execute().use { response ->
                 if (!response.isSuccessful) throw IOException("Unexpected code $response")
                 val str = response.body!!.string()
@@ -147,7 +143,7 @@ class Repository @Inject constructor(private val dbRoom: Provider<AppDatabase>){
         return liveData
     }
 
-    fun removeVideo(uid: String, docId: String?) {
+    override fun removeVideo(uid: String, docId: String?) {
 
         db.collection("users").document(uid).collection("videos").document(docId!!).delete()
             .addOnSuccessListener{

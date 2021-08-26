@@ -1,15 +1,11 @@
-package com.poema.theorganizerapp.activities
+package com.poema.theorganizerapp.ui.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.poema.theorganizerapp.R
-import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_splash.*
 import java.util.*
 import kotlin.concurrent.schedule
 
