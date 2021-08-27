@@ -1,8 +1,9 @@
 package com.poema.theorganizerapp.ui.viewmodels
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import android.service.autofill.Transformation
+import androidx.lifecycle.*
+import androidx.lifecycle.Transformations.switchMap
+
 import com.google.firebase.auth.FirebaseAuth
 import com.poema.theorganizerapp.models.EntireCategory
 import com.poema.theorganizerapp.models.Video
@@ -29,13 +30,37 @@ class MainViewViewModel @Inject constructor(
     var allGroups = MutableLiveData<MutableList<EntireCategory>>()
     var allGroups1 = mutableListOf<EntireCategory>()
     var sortingAlphabetically :Boolean = false
+    var vidsFromListener = repo.getLiveVid()
+    var fromListener : LiveData<MutableList<EntireCategory>> = Transformations.switchMap(vidsFromListener){
+    sortVideos(it)}
 
 
-    fun getVideos(internetConnection:Boolean) {
+    init{
         val currentUser = auth.currentUser
-        if (currentUser != null) {
+        currentUser?.let {
             uid = auth.currentUser!!.uid
         }
+        repo.firestoreListener(uid)
+    }
+
+   fun sortVideos(vids: List<Video>): MutableLiveData<MutableList<EntireCategory>> {
+        val list : MutableList<Video> = mutableListOf()
+        for(video in vids) {
+            list.add(video)
+        }
+        val list2 = doSorting(list)
+        allGroups.value = list2
+        return allGroups
+    }
+
+/*
+    fun getVideos(internetConnection:Boolean) {
+
+        val currentUser = auth.currentUser
+        currentUser?.let {
+            uid = auth.currentUser!!.uid
+        }
+        repo.firestoreListener(uid)
         if (internetConnection) {
             viewModelScope.launch {
                 videos = mutableListOf()
@@ -70,7 +95,7 @@ class MainViewViewModel @Inject constructor(
         else {
             prepGetFromCache()
         }
-    }
+    }*/
 
     private fun prepGetFromCache() {
         CoroutineScope(Dispatchers.IO).launch {
@@ -168,12 +193,7 @@ class MainViewViewModel @Inject constructor(
             tempGroup3 = mutableListOf()
         }
         //skriver ut för att dubbelkolla att sorteringen är rätt
-        for (i in  0 until entireGroups.size){
-            println("!!! ${entireGroups[i].categoryTitle}")
-            for (j in 0 until entireGroups[i].categoryItems.size) {
-                println("!!! ITEM: ${entireGroups[i].categoryItems[j].title} DATE : ${entireGroups[i].categoryItems[j].dateCreated}")
-            }
-        }
+
         allGroups1 = entireGroups
 
 
@@ -234,6 +254,7 @@ class MainViewViewModel @Inject constructor(
     fun getList(): MutableLiveData<MutableList<EntireCategory>> {
         return allGroups
     }
+
 
 }
 

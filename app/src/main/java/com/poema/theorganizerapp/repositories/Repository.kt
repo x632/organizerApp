@@ -27,5 +27,9 @@ interface Repository {
 
     fun login(email:String, password: String)
 
+    fun firestoreListener(uid:String)
+
+    fun getLiveVid():MutableLiveData<List<Video>>
+
 
 }

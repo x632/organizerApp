@@ -34,6 +34,10 @@ class MainView : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_view)
+        main_recycler.apply {
+        layoutManager = LinearLayoutManager(this@MainView)
+        videoAdapter = VideoAdapter(this@MainView)
+        adapter = videoAdapter}
         toggle = ActionBarDrawerToggle(this,drawerLayout,R.string.open,R.string.close)
         drawerLayout.addDrawerListener(toggle)
 
@@ -52,20 +56,21 @@ class MainView : AppCompatActivity() {
                 }
                 R.id.mItem2 -> { viewModel.sortingAlphabetically=true
                     val internetConnection = this.isInternetAvailable()
-                    viewModel.getVideos(internetConnection)
+                    //viewModel.getVideos(internetConnection)
                 }
                 R.id.mItem3 -> { viewModel.sortingAlphabetically=false
                     val internetConnection = this.isInternetAvailable()
-                    viewModel.getVideos(internetConnection)
+                    //viewModel.getVideos(internetConnection)      //ändrar här och ovan !!!!!!!!!!!!!!!!!!!!!!!!!
                 }
             }
             true
         }
         val spinner = findViewById<ProgressBar>(R.id.progressBar2)
         val internetConnection = this.isInternetAvailable()
-        viewModel.getVideos(internetConnection)
-        setGroupListObserver(spinner)
-        viewModel.getList()
+        //viewModel.getVideos(internetConnection)
+        //setGroupListObserver(spinner)
+        //viewModel.getList()
+        subscribeToChanges(spinner)
 
         floatingActionButton.setOnClickListener(){
             val context = this
@@ -84,18 +89,33 @@ class MainView : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun setGroupListObserver(spinner: ProgressBar) {
-        viewModel.getList().observe(this@MainView, { t ->
+   /* private fun setGroupListObserver(spinner: ProgressBar) {
+        viewModel.getList().observe(this@MainView, { entireCategoryList ->
             main_recycler.apply {
                 layoutManager = LinearLayoutManager(this@MainView)
-                videoAdapter = VideoAdapter(this@MainView, t)
+                videoAdapter = VideoAdapter(this@MainView, entireCategoryList)
                 adapter = videoAdapter
             }
             videoAdapter.notifyDataSetChanged()
             spinner.visibility = View.GONE
         })
-    }
+    }*/
+    // testar med funktionen nedan iställer för den ovan
+    private fun subscribeToChanges(spinner: ProgressBar){
+        viewModel.fromListener.observe(this@MainView, {entireCategoryList ->
+            println("!!! Has observed the videos the size is ${entireCategoryList.size}")
+            //main_recycler.apply {
+                /* layoutManager = LinearLayoutManager(this@MainView)
+                videoAdapter = VideoAdapter(this@MainView, entireCategoryList)
+                adapter = videoAdapter*/
+                videoAdapter.submitList(entireCategoryList)
+            videoAdapter.notifyDataSetChanged() //denna behövs nu
+            //}
+            spinner.visibility = View.GONE
 
+        })
+    }
+    // testar här
     private fun showToast(msg: String) {
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
     }

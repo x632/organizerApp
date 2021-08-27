@@ -21,9 +21,11 @@ import com.poema.theorganizerapp.models.Video
 import com.poema.theorganizerapp.utils.Utility.isInternetAvailable
 
 
-class CategoryItemAdapter(private val context: Context, private val categoryItem :List<Video>) : RecyclerView.Adapter<CategoryItemAdapter.CategoryItemViewHolder>(){
+class CategoryItemAdapter(private val context: Context) : RecyclerView.Adapter<CategoryItemAdapter.CategoryItemViewHolder>(){
 
     private var uid = ""
+
+    private var categoryItem :List<Video> = listOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryItemViewHolder {
         return CategoryItemViewHolder(LayoutInflater.from(context).inflate(R.layout.cat_row_items,parent,false))
@@ -39,6 +41,10 @@ class CategoryItemAdapter(private val context: Context, private val categoryItem
 
     override fun getItemCount(): Int {
         return categoryItem.size
+    }
+
+    fun submitList( list: List<Video> ){
+    categoryItem = list
     }
 
 
@@ -110,8 +116,11 @@ class CategoryItemAdapter(private val context: Context, private val categoryItem
                     if (auth.currentUser != null) {
                         uid = auth.currentUser!!.uid
                     }
-                    val intent=Intent(context,MainView::class.java)
-                    context.startActivity(intent)
+                    /*val testList : List<Video> = listOf<Video>()
+                    categoryItem=testList*/
+
+                   // val intent=Intent(context,MainView::class.java)
+                   // context.startActivity(intent)
                 }
                 .addOnFailureListener {
                 }

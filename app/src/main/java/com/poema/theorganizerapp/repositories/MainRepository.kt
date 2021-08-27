@@ -22,11 +22,13 @@ class MainRepository @Inject constructor(dbRoom: Provider<AppDatabase>): Reposit
     private val client = OkHttpClient()
     private var db: FirebaseFirestore = FirebaseFirestore.getInstance()
     private var auth: FirebaseAuth = FirebaseAuth.getInstance()
+    //private val thisUserId : String? = auth.currentUser?.uid
     var message = MutableLiveData<String>()
     var isSignedIn = MutableLiveData<Boolean>()
     var accountCreated = MutableLiveData<Boolean>()
     var isSaved = MutableLiveData(false)
     var isRemoved = MutableLiveData(false)
+    private var liveVids = MutableLiveData<List<Video>>()
 
     override fun createCache(videos: MutableList<Video>){
         val job1 : CompletableJob = Job()
@@ -35,10 +37,8 @@ class MainRepository @Inject constructor(dbRoom: Provider<AppDatabase>): Reposit
             for (i in 0 until videos.size) {
                 val uid = "${videos[i].docId}"
                 val numb :Video = dao.findVideoByUid(uid)
-                if(numb!= null){println("!!! finns i databasen: ${numb.docId}")}
-                else{
-                    val number = dao.insert(videos[i])
-                    println("!!! ${videos[i].title} nummer $number sparades i cache")
+                if(numb == null) {val number = dao.insert(videos[i])
+
                 }
             }
 
@@ -53,9 +53,7 @@ class MainRepository @Inject constructor(dbRoom: Provider<AppDatabase>): Reposit
         var videos = mutableListOf<Video>()
         videosGlobal = mutableListOf()
         videos = dao.getAllVideos() as MutableList<Video>
-        for (video in videos) {
-            println("!!! Hämtat från cache : ${video.title} från cache")
-        }
+
         return videos
     }
 
@@ -100,13 +98,32 @@ class MainRepository @Inject constructor(dbRoom: Provider<AppDatabase>): Reposit
         db.collection("users").document(id)
             .collection("videos").add(video)
             .addOnSuccessListener { documentReference ->
-                println("!!! video was saved")
                 val docId = documentReference.id
                 println("id:t :$docId")
                 updateId(docId,id)
             }
             .addOnFailureListener {
                 println("!!! video was not saved")
+            }
+    }
+
+    override fun firestoreListener(uid:String) {
+        println("!!! Been here!!!!")
+        val tempVideoList :MutableList<Video> = mutableListOf()
+
+        db.collection("users").document(uid).collection("videos")
+            .addSnapshotListener{ value, e ->
+                if (e != null) {
+                    println( "!!! Listen failed - $e")
+                    return@addSnapshotListener
+                }
+
+                for (document in value!!) {
+                    val video = document!!.toObject(Video::class.java)
+                    tempVideoList.add(video)
+                }
+                liveVids.value = tempVideoList
+                //friendReqAdapter.notifyDataSetChanged()
             }
     }
 
@@ -151,5 +168,10 @@ class MainRepository @Inject constructor(dbRoom: Provider<AppDatabase>): Reposit
             }
             .addOnFailureListener {
             }
+    }
+
+
+    override fun getLiveVid():MutableLiveData<List<Video>>{
+        return liveVids
     }
 }
