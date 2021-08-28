@@ -1,15 +1,11 @@
 package com.poema.theorganizerapp.ui.viewmodels
 
-import android.service.autofill.Transformation
 import androidx.lifecycle.*
-import androidx.lifecycle.Transformations.switchMap
 
 import com.google.firebase.auth.FirebaseAuth
 import com.poema.theorganizerapp.models.EntireCategory
 import com.poema.theorganizerapp.models.Video
-import com.poema.theorganizerapp.models.VideosGlobal.videosGlobal
 import com.poema.theorganizerapp.repositories.MainRepository
-import com.poema.theorganizerapp.repositories.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 
 
@@ -30,9 +26,10 @@ class MainViewViewModel @Inject constructor(
     var allGroups = MutableLiveData<MutableList<EntireCategory>>()
     var allGroups1 = mutableListOf<EntireCategory>()
     var sortingAlphabetically :Boolean = false
-    var vidsFromListener = repo.getLiveVid()
-    var toUiFromListener : LiveData<MutableList<EntireCategory>> = Transformations.switchMap(vidsFromListener){
-    sortVideos(it)}
+    var vidsFromRepoListener = repo.getLiveVid()
+    var toUiFromListener : LiveData<MutableList<EntireCategory>> = Transformations.switchMap(vidsFromRepoListener){
+    sortVideos(it)
+    }
 
 
     init{
