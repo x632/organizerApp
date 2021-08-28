@@ -45,6 +45,7 @@ class CategoryItemAdapter(private val context: Context) : RecyclerView.Adapter<C
 
     fun submitList( list: List<Video> ){
     categoryItem = list
+        notifyDataSetChanged()
     }
 
 
@@ -119,8 +120,10 @@ class CategoryItemAdapter(private val context: Context) : RecyclerView.Adapter<C
                     /*val testList : List<Video> = listOf<Video>()
                     categoryItem=testList*/
 
-                   // val intent=Intent(context,MainView::class.java)
-                   // context.startActivity(intent)
+                 /*  val intent=Intent(context,MainView::class.java)
+                    context.startActivity(intent)*/
+
+
                 }
                 .addOnFailureListener {
                 }

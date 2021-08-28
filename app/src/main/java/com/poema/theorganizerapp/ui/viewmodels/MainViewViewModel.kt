@@ -9,6 +9,7 @@ import com.poema.theorganizerapp.models.EntireCategory
 import com.poema.theorganizerapp.models.Video
 import com.poema.theorganizerapp.models.VideosGlobal.videosGlobal
 import com.poema.theorganizerapp.repositories.MainRepository
+import com.poema.theorganizerapp.repositories.MainRepository.Companion.listenerActivated
 import com.poema.theorganizerapp.repositories.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 
@@ -20,7 +21,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewViewModel @Inject constructor(
-    private val repo: Repository,
+    private val repo: MainRepository,
 
     ) : ViewModel() {
 
@@ -36,11 +37,14 @@ class MainViewViewModel @Inject constructor(
 
 
     init{
-        val currentUser = auth.currentUser
-        currentUser?.let {
-            uid = auth.currentUser!!.uid
-        }
-        repo.firestoreListener(uid)
+        //if (!listenerActivated) {
+            println("!!!   STARTED LISTENER")
+            val currentUser = auth.currentUser
+            currentUser?.let {
+                uid = auth.currentUser!!.uid
+            }
+            repo.firestoreListener(uid)
+       // }
     }
 
    fun sortVideos(vids: List<Video>): MutableLiveData<MutableList<EntireCategory>> {

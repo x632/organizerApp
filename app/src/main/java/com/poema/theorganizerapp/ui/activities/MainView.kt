@@ -103,13 +103,20 @@ class MainView : AppCompatActivity() {
     // testar med funktionen nedan iställer för den ovan
     private fun subscribeToChanges(spinner: ProgressBar){
         viewModel.fromListener.observe(this@MainView, {entireCategoryList ->
-            println("!!! Has observed the videos the size is ${entireCategoryList.size}")
+            var amount = 0
+            for(i in 0 until entireCategoryList.size) {
+                for (j in 0 until entireCategoryList[i].categoryItems.size) {
+                    println("!!! Från obs.: category: ${entireCategoryList[i].categoryItems[j].title}")
+                    amount++
+                }
+            }
+            println("!!! Thare are ${amount} videos!!")
             //main_recycler.apply {
                 /* layoutManager = LinearLayoutManager(this@MainView)
                 videoAdapter = VideoAdapter(this@MainView, entireCategoryList)
                 adapter = videoAdapter*/
                 videoAdapter.submitList(entireCategoryList)
-            videoAdapter.notifyDataSetChanged() //denna behövs nu
+            //videoAdapter.notifyDataSetChanged() //denna behövs nu
             //}
             spinner.visibility = View.GONE
 

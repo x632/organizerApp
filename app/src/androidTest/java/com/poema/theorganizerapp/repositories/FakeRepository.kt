@@ -37,4 +37,13 @@ class FakeRepository():Repository {
     override fun login(email: String, password: String) {
         //do nothing
     }
+
+    override fun firestoreListener(uid: String) {
+        //do nothing
+    }
+
+    override fun getLiveVid(): MutableLiveData<List<Video>> {
+        val a = MutableLiveData<List<Video>>()
+       return a
+    }
 }

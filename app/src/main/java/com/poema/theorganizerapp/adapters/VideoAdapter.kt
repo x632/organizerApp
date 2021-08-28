@@ -23,6 +23,7 @@ class VideoAdapter (private val context: Context): RecyclerView.Adapter<VideoAda
 
     fun submitList(list: List<EntireCategory>){
         groups = list
+        notifyDataSetChanged()
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -41,7 +42,7 @@ class VideoAdapter (private val context: Context): RecyclerView.Adapter<VideoAda
         recyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL,false)
         recyclerView.adapter = itemRecyclerAdapter
         itemRecyclerAdapter.submitList(videos)
-        itemRecyclerAdapter.notifyDataSetChanged()
+
 
     }
 
