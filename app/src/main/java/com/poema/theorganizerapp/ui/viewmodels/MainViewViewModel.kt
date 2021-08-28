@@ -9,7 +9,6 @@ import com.poema.theorganizerapp.models.EntireCategory
 import com.poema.theorganizerapp.models.Video
 import com.poema.theorganizerapp.models.VideosGlobal.videosGlobal
 import com.poema.theorganizerapp.repositories.MainRepository
-import com.poema.theorganizerapp.repositories.MainRepository.Companion.listenerActivated
 import com.poema.theorganizerapp.repositories.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 

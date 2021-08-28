@@ -15,6 +15,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.poema.theorganizerapp.R
 import com.poema.theorganizerapp.adapters.VideoAdapter
+import com.poema.theorganizerapp.models.VideosGlobal.videosGlobal
 import com.poema.theorganizerapp.utils.Utility.isInternetAvailable
 
 import com.poema.theorganizerapp.ui.viewmodels.MainViewViewModel
@@ -23,6 +24,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_view.*
 import kotlinx.coroutines.*
 import java.util.*
+import java.util.logging.Logger.global
 
 @AndroidEntryPoint
 class MainView : AppCompatActivity() {
@@ -100,29 +102,24 @@ class MainView : AppCompatActivity() {
             spinner.visibility = View.GONE
         })
     }*/
-    // testar med funktionen nedan iställer för den ovan
+
     private fun subscribeToChanges(spinner: ProgressBar){
-        viewModel.fromListener.observe(this@MainView, {entireCategoryList ->
+        viewModel.fromListener.observe(this@MainView, { entireCategoryList ->
             var amount = 0
+            videosGlobal = mutableListOf()
             for(i in 0 until entireCategoryList.size) {
                 for (j in 0 until entireCategoryList[i].categoryItems.size) {
                     println("!!! Från obs.: category: ${entireCategoryList[i].categoryItems[j].title}")
                     amount++
+                    videosGlobal.add(entireCategoryList[i].categoryItems[j])
                 }
             }
             println("!!! Thare are ${amount} videos!!")
-            //main_recycler.apply {
-                /* layoutManager = LinearLayoutManager(this@MainView)
-                videoAdapter = VideoAdapter(this@MainView, entireCategoryList)
-                adapter = videoAdapter*/
-                videoAdapter.submitList(entireCategoryList)
-            //videoAdapter.notifyDataSetChanged() //denna behövs nu
-            //}
+            videoAdapter.submitList(entireCategoryList)
             spinner.visibility = View.GONE
-
         })
     }
-    // testar här
+
     private fun showToast(msg: String) {
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
     }
