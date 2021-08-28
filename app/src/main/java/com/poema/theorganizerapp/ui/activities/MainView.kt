@@ -24,7 +24,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_view.*
 import kotlinx.coroutines.*
 import java.util.*
-import java.util.logging.Logger.global
 
 @AndroidEntryPoint
 class MainView : AppCompatActivity() {
@@ -104,7 +103,7 @@ class MainView : AppCompatActivity() {
     }*/
 
     private fun subscribeToChanges(spinner: ProgressBar){
-        viewModel.fromListener.observe(this@MainView, { entireCategoryList ->
+        viewModel.toUiFromListener.observe(this@MainView, { entireCategoryList ->
             var amount = 0
             videosGlobal = mutableListOf()
             for(i in 0 until entireCategoryList.size) {

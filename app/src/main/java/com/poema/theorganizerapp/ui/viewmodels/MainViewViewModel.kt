@@ -31,7 +31,7 @@ class MainViewViewModel @Inject constructor(
     var allGroups1 = mutableListOf<EntireCategory>()
     var sortingAlphabetically :Boolean = false
     var vidsFromListener = repo.getLiveVid()
-    var fromListener : LiveData<MutableList<EntireCategory>> = Transformations.switchMap(vidsFromListener){
+    var toUiFromListener : LiveData<MutableList<EntireCategory>> = Transformations.switchMap(vidsFromListener){
     sortVideos(it)}
 
 
