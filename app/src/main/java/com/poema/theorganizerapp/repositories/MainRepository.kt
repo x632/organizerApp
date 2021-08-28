@@ -18,7 +18,7 @@ import okhttp3.OkHttpClient
 import javax.inject.Inject
 import javax.inject.Provider
 
-class MainRepository @Inject constructor(dbRoom: Provider<AppDatabase>){
+class MainRepository @Inject constructor(dbRoom: Provider<AppDatabase>):Repository{
 
     private val dao = dbRoom.get().videoDao()
     private val client = OkHttpClient()
@@ -31,12 +31,8 @@ class MainRepository @Inject constructor(dbRoom: Provider<AppDatabase>){
     var isRemoved = MutableLiveData(false)
     private var liveVids = MutableLiveData<List<Video>>()
 
-    companion object{
 
-        var listenerActivated: Boolean = false
-    }
-
-    fun createCache(videos: MutableList<Video>){
+    override fun createCache(videos: MutableList<Video>){
         val job1 : CompletableJob = Job()
         CoroutineScope(Dispatchers.IO + job1).launch {
 
@@ -53,7 +49,7 @@ class MainRepository @Inject constructor(dbRoom: Provider<AppDatabase>){
         println("!!! the Job :$job1")
     }
 
-    fun getFromCache(): MutableList<Video> {
+    override fun getFromCache(): MutableList<Video> {
         val job2: CompletableJob = Job()
         println("!!! the Job :$job2")
         var videos = mutableListOf<Video>()
@@ -63,7 +59,7 @@ class MainRepository @Inject constructor(dbRoom: Provider<AppDatabase>){
         return videos
     }
 
-   fun login(email:String, password: String) {
+   override fun login(email:String, password: String) {
 
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
@@ -95,12 +91,12 @@ class MainRepository @Inject constructor(dbRoom: Provider<AppDatabase>){
             }
     }
 
-    suspend fun getGroupsFromFirestore(uid:String): List<DocumentSnapshot> {
+    override suspend fun getGroupsFromFirestore(uid:String): List<DocumentSnapshot> {
         val snapshot = db.collection("users").document(uid).collection("videos").get().await()
         return snapshot.documents
     }
 
-    fun saveToFirestore(video: Video, id:String) {
+    override fun saveToFirestore(video: Video, id:String) {
         db.collection("users").document(id)
             .collection("videos").add(video)
             .addOnSuccessListener { documentReference ->
@@ -113,11 +109,8 @@ class MainRepository @Inject constructor(dbRoom: Provider<AppDatabase>){
             }
     }
 
-    fun firestoreListener(uid:String) {
+    override fun firestoreListener(uid:String) {
         println("!!! Been here!!!!")
-        listenerActivated = true
-
-
         db.collection("users").document(uid).collection("videos")
             .addSnapshotListener{ value, e ->
                 if (e != null) {
@@ -141,7 +134,7 @@ class MainRepository @Inject constructor(dbRoom: Provider<AppDatabase>){
             }
     }
 
-    fun updateId(docId: String, id: String) {
+    override fun updateId(docId: String, id: String) {
         db.collection("users").document(id)
             .collection("videos").document(docId).update("docId",docId)
             .addOnSuccessListener {
@@ -153,7 +146,7 @@ class MainRepository @Inject constructor(dbRoom: Provider<AppDatabase>){
             }
     }
 
-    fun getYouTubeVideo(url:String):MutableLiveData<String> {
+    override fun getYouTubeVideo(url:String):MutableLiveData<String> {
         val liveData = MutableLiveData<String>()
 
         CoroutineScope(Dispatchers.IO ).launch {
@@ -174,7 +167,7 @@ class MainRepository @Inject constructor(dbRoom: Provider<AppDatabase>){
         return liveData
     }
 
-    fun removeVideo(uid: String, docId: String?) {
+    override fun removeVideo(uid: String, docId: String?) {
 
         db.collection("users").document(uid).collection("videos").document(docId!!).delete()
             .addOnSuccessListener{
@@ -185,7 +178,7 @@ class MainRepository @Inject constructor(dbRoom: Provider<AppDatabase>){
     }
 
 
-    fun getLiveVid():MutableLiveData<List<Video>>{
+    override fun getLiveVid():MutableLiveData<List<Video>>{
         return liveVids
     }
 }

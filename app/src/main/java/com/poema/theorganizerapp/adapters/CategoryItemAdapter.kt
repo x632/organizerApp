@@ -45,7 +45,7 @@ class CategoryItemAdapter(private val context: Context) : RecyclerView.Adapter<C
 
     fun submitList( list: List<Video> ){
     categoryItem = list
-        notifyDataSetChanged()
+
     }
 
 

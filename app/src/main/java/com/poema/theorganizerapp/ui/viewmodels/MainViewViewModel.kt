@@ -37,14 +37,12 @@ class MainViewViewModel @Inject constructor(
 
 
     init{
-        //if (!listenerActivated) {
             println("!!!   STARTED LISTENER")
             val currentUser = auth.currentUser
             currentUser?.let {
                 uid = auth.currentUser!!.uid
             }
             repo.firestoreListener(uid)
-       // }
     }
 
    fun sortVideos(vids: List<Video>): MutableLiveData<MutableList<EntireCategory>> {
